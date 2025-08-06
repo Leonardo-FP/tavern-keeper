@@ -7,8 +7,6 @@ import { useAuthStore } from './stores/auth'; // Importe seu store de autentica�
 const authStore = useAuthStore();
 
 onMounted(() => {
-  // Configura o interceptor do Axios globalmente APENAS UMA VEZ
-  authStore.setupAxiosInterceptor();
   // Tenta carregar os dados do usuário se um token já existe no localStorage
   authStore.loadUser();
 });

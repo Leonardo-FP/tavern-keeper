@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
 import router from '../router'; 
+
+import api from '@/services/api'; // Importa a instância do Axios configurada para a API do Laravel
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -22,7 +23,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = true;
       this.authError = null;
       try {
-        const response = await axios.post('http://localhost:8000/api/login', credentials);
+        const response = await api.post('/login', credentials);
 
         this.token = response.data.token;
         this.user = response.data.user;
@@ -49,7 +50,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = true;
       this.authError = null;
       try {
-        await axios.post('http://localhost:8000/api/logout', {});
+        await api.post('/logout', {});
       } catch (error) {
         console.error('Erro ao fazer logout no backend (pode ser token expirado ou já inválido):', error);
       } finally {
@@ -66,7 +67,7 @@ export const useAuthStore = defineStore('auth', {
     async loadUser() {
         if (this.token && !this.user) {
             try {
-                const response = await axios.get('http://localhost:8000/api/user');
+                const response = await api.get('/user');
                 this.user = response.data;
                 this.isLogged = true;
                 localStorage.setItem('user_data', JSON.stringify(this.user));
@@ -81,25 +82,5 @@ export const useAuthStore = defineStore('auth', {
             localStorage.removeItem('user_data');
         }
     },
-
-    setupAxiosInterceptor() {
-        axios.interceptors.request.use(config => {
-            const token = this.token; // Pega o token do store
-            if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
-            return config;
-        }, error => {
-            return Promise.reject(error);
-        });
-
-        axios.interceptors.response.use(response => response, error => {
-            if (error.response && error.response.status === 401 && this.isLogged) {
-                console.warn('401 Unauthorized, token provavelmente inválido ou expirado. Deslogando...');
-                this.logout();
-            }
-            return Promise.reject(error);
-        });
-    }
   },
 });
