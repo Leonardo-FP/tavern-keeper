@@ -21,7 +21,6 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(credentials) {
       this.isLoading = true;
-      this.authError = null;
       try {
         const response = await api.post('/login', credentials);
 
@@ -34,8 +33,56 @@ export const useAuthStore = defineStore('auth', {
 
         router.push('/');
       } catch (error) {
-        console.error('Erro no login (Store):', error);
-        this.authError = error.response?.data?.message || 'Erro ao fazer login. Verifique suas credenciais.';
+       
+        // Limpa os erros antigos
+        this.fieldErros = null;
+
+        const data = error.response?.data;
+
+        if(data?.errors){
+          // Guarda o objeto de erros separado por campo
+          this.fieldErrors = data.errors;
+        } else {
+          this.fieldErrors = {};
+        }
+
+        this.isLogged = false;
+        this.user = null;
+        this.token = null;
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user_data');
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async register(credentials) {
+      this.isLoading = true;
+      try{
+        const response = await api.post('/register', credentials);
+
+        this.token = response.data.token;
+        this.user = response.data.user;
+        this.isLogged = true;
+
+        localStorage.setItem('auth_token', this.token);
+        localStorage.setItem('user_data', JSON.stringify(this.user));
+
+        router.push('/');
+      } catch(error) {
+
+        // Limpa os erros antigos
+        this.fieldErros = null;
+
+        const data = error.response?.data;
+
+        if(data?.errors){
+          // Guarda o objeto de erros separado por campo
+          this.fieldErrors = data.errors;
+        } else {
+          this.fieldErrors = {};
+        }
+
         this.isLogged = false;
         this.user = null;
         this.token = null;

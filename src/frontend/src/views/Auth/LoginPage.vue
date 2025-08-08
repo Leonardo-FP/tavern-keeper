@@ -29,6 +29,11 @@ async function handleLogin() {
           required
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         >
+        <ul v-if="authStore?.fieldErrors?.email">
+            <li v-for="(msg, index) in authStore?.fieldErrors?.email" :key="index" class="text-red-600 text-sm">
+                {{ msg }}
+            </li>
+        </ul>
       </div>
       <div class="mb-6">
         <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Senha:</label>
@@ -39,6 +44,11 @@ async function handleLogin() {
           required
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         >
+        <ul v-if="authStore?.fieldErrors?.password">
+            <li v-for="(msg, index) in authStore?.fieldErrors?.password" :key="index" class="text-red-600 text-sm">
+                {{ msg }}
+            </li>
+        </ul>
       </div>
       <button
         type="submit"
@@ -46,7 +56,8 @@ async function handleLogin() {
         :class="{ 'opacity-50 cursor-not-allowed': authStore.isLoading }"
       >
         {{ authStore.isLoading ? 'Entrando...' : 'Entrar' }} </button>
-      <p v-if="authStore.authError" class="mt-4 text-center text-red-600 text-sm">{{ authStore.authError }}</p> </form>
+      <p v-if="authStore.authError" class="mt-4 text-center text-red-600 text-sm">{{ authStore.authError }}</p> 
+    </form>
     <p class="mt-6 text-center text-sm text-gray-600">
       Não tem conta?
       <RouterLink to="/register" class="font-medium text-indigo-600 hover:text-indigo-500">
