@@ -19,6 +19,12 @@ https://github.com/Leonardo-FP/tavern-keeper.git
 ## Após clonar, entre no projeto
 cd tavern-keeper
 
+## Evitar que o git versione alterações nas permissões dos arquivos
+git config core.fileMode false
+
+## Entrar na pasta do Laravel
+cd /src/backend
+
 ## Copie o arquivo .env presente na raiz do projeto, que define as variáveis USER_ID e GROUP_ID. Essas variáveis configuram o usuário que o container PHP vai usar, garantindo que os arquivos criados (como via comandos artisan) tenham permissões compatíveis com seu usuário do WSL
 cp .env.example .env
 
@@ -37,16 +43,19 @@ DB_PASSWORD=12345678
 docker-compose up --build -d
 
 ## Acesse o container do PHP
-docker exec -it laravel-php bash
+docker exec -it php sh
 
 ## Instale as dependências do projeto
 composer install
 
 ## Ajuste permissões de diretórios
-chmod -R 775 storage && chown -R www-data:www-data storage && chmod -R 775 storage/framework
+chmod -R 775 storage bootstrap/cache
 
 ## Gere a Key do Laravel
 php artisan key:generate
 
-## Rode as migrations
+## Rode as Migrations
 php artisan migrate
+
+## Rode o Seeder que cria o usuário admin
+php artisan db:seed --class=UserSeeder
