@@ -43,10 +43,16 @@ class AuthController extends Controller
     public function register(Request $request){
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
             'password_confirmation' => ['required']
         ]);
+
+        // Garante que a senha seja hasheada de forma segura
+        $validated['password'] = Hash::make($validated['password']);
+
+        // Remove o campo de confirmação da senha antes de criar o usuário
+        unset($validated['password_confirmation']);
 
         try{
             $user = User::create($validated);
