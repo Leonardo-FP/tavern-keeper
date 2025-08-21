@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+    /* --color-*: initial; */
+    --color-spice: #6d402c; /* Marrom Escuro */
+    --color-santa-fe: #b96c50; /* Terracota */
+    --color-di-serria: #e1a66b; /* Laranja Claro / Bege */
+    --color-rajah: #f8c76d; /* Amarelo Alaranjado */
+    --color-flamingo: #f24a2c; /* Laranja Intenso */
+    --color-black: #000000; /* Para legibilidade em fundos claros */
+    --color-white: #ffffff; /* Para legibilidade em fundos escuros */
+
+    --shadow-cards: 0 12px 12px rgba(0, 0, 0, 0.35); 
+}
+
+/* --- Regras @font-face --- */
+@font-face {
+  font-family: 'Draconis';
+  src: url('fonts/Draconis.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Draconis';
+  src: url('fonts/DraconisBold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Uncial Antiqua';
+  src: url('fonts/UncialAntiqua.ttf') format('truetype');
+  font-weight: normal;
+}
+
+/* --- Aplicação das fontes --- */
+body {
+  font-family: 'Draconis'; 
+} 
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+}
