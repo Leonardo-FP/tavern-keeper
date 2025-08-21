@@ -33,6 +33,11 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // Carrega o relacionamento que trás os dados do ícone de perfil
+        $user->load('icon');
+        // Carrega o relacionamento que trás os dados do gênero do usuário
+        $user->load('gender');
+
         return response()->json([
             'message' => 'Login realizado com sucesso!',
             'token' => $token,
