@@ -1,35 +1,30 @@
 <script setup>
     defineProps({
-        link: {
-            type: String,
-            required: true
-        },
-        title: {
-            type: String,
-            required: true
-        },
-        content: {
-            type: String,
-            required: true
-        },
-        iconSrc: {
-            type: String,
-            required: true
-        },
-        iconAlt: {
-            type: String,
-            required: true
+        title: String,
+        content: String,
+        iconSrc: String,
+        iconAlt: String,
+        link: String,
+        isButton: {
+            type: Boolean,
+            default: false
         }
     });
+
+    const emit = defineEmits(['click']);
 </script>
 
 <template>
-    <a :href="link" class="flex flex-1 items-center gap-x-4 rounded-xl bg-santa-fe p-6 shadow-cards outline outline-black/5 hover:bg-di-serria">
+    <component
+        :is="isButton ? 'button' : 'a'"
+        :href="isButton ? null : link" 
+        @click="isButton ? emit('click') : null"
+        class="flex flex-1 items-center gap-x-4 rounded-xl bg-santa-fe p-6 shadow-cards outline outline-black/5 hover:bg-di-serria cursor-pointer"
+    >
         <img class="size-12 shrink-0" :src="iconSrc" :alt="iconAlt" />
         <div>
-            <div class="text-2xl">{{ title }}</div>
-            <p class="text-lg">{{ content }}</p>
+            <div class="text-xl text-left font-bold">{{ title }}</div>
+            <p class="text-sm">{{ content }}</p>
         </div>
-    </a>
+    </component>
 </template>
-

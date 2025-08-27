@@ -1,32 +1,29 @@
 <script setup>
     import Card from '@/components/Card.vue';
-    import { onMounted } from 'vue'; // Apenas onMounted é necessário agora
-    import { useAuthStore } from '../stores/auth'; // Importa seu store de autenticação
+    import ModalCreateBoard from '@/components/Boards/ModalCreate.vue';
+    import { useAuthStore } from '@/stores/auth';
+    import { useModalsStore  } from '@/stores/modals'; 
 
-    // Instancia o store de autenticação
     const authStore = useAuthStore();
-
-    onMounted(() => {
-        // Tenta carregar os dados do usuário se um token já existe no localStorage
-        authStore.loadUser();
-    });
+    const modalsStore = useModalsStore();
 </script>
 <template>
     <h1 class="mb-6 text-3xl">Olá <span class="text-flamingo">{{ authStore.user.nickname }}</span>, seja bem vindo(a)!</h1>
     <div class="flex flex-wrap justify-between gap-6 mb-6">
         <Card 
-            title="Minhas Mesas"
-            content="Clique para entrar em uma de suas mesas"
+            title="Encontrar Mesas"
+            content="Clique para encontrar uma mesa e começar a jogar"
             iconSrc="/assets/icons/cards/d20.png"
-            iconAlt="Este é um card que permite aos jogadores entrarem em uma de suas mesas"
+            iconAlt="Este é um card que permite aos jogadores entrarem em mesas"
             link="/about"
         />
-        <Card 
-            title="Criar mesa"
+        <Card
+            title="Criar Nova Mesa"
             content="Clique para criar uma nova mesa"
             iconSrc="/assets/icons/cards/new-table.png"
-            iconAlt="Este é um card que permite aos jogadores criarem uma nova mesa"
-            link="/about"
+            iconAlt="Ícone para criar mesa"
+            :isButton="true"
+            @click="modalsStore.openCreateBoardModal"
         />
     </div>
     <div class="flex flex-wrap justify-between gap-6">
@@ -58,6 +55,9 @@
             iconAlt="Este é um card que permite aos jogadores visualizarem as dúvidas frequentes"
             link="/about"
         />
+    </div>
+    <div class="p-8">
+        <ModalCreateBoard />
     </div>
     
 </template>
