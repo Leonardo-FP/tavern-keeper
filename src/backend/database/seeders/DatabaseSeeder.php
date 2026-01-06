@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             GenderSeeder::class,
             IconSeeder::class,
             UserSeeder::class,
+            BoardSeeder::class,
         ]);
     }
 }

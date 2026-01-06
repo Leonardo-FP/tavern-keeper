@@ -1,171 +1,113 @@
 <script setup>
-import Modal from '@/components/Modal.vue';
-import { ref } from 'vue';
+import { useForm, useField } from 'vee-validate';
+import * as yup from 'yup';
+import Modal from '@/components/ui/Modal.vue';
+import AppInput from '@/components/ui/AppInput.vue';
+import AppRadioGroup from '@/components/ui/AppRadioGroup.vue';
+import AppRange from '@/components/ui/AppRange.vue';
 import { useModalsStore } from '@/stores/modals';
 import { useToastStore } from '@/stores/toast';
+import { useBoardStore } from '@/stores/boardStore';
 
 const modalsStore = useModalsStore();
 const toastStore = useToastStore();
+const boardStore = useBoardStore();
 
-var boardName = ref('');
-var isPrivate = ref(false);
-var boardPassword = ref('');
-var usersLimit = ref(10);
+// 1. Definição das Regras com Yup
+const schema = yup.object({
+  name: yup.string().required('O nome da mesa é obrigatório').min(3, 'Mínimo 3 caracteres'),
+  is_private: yup.boolean(),
+  password: yup.string().when('is_private', {
+    is: true,
+    then: (s) => s.required('Mesas privadas exigem senha').min(6, 'Mínimo 6 caracteres'),
+    otherwise: (s) => s.nullable()
+  }),
+  users_limit: yup.number().min(1, 'Mínimo 1').max(100, 'Máximo 100').required('Defina um limite')
+});
 
-var errors = ref([]);
-var loading = ref(false);
+// 2. Configuração do Formulário
+const { handleSubmit, errors, resetForm, isSubmitting, setErrors } = useForm({
+  validationSchema: schema, // Insere as regras do formulário, definidas acima pelo Yup
+  initialValues: {
+    name: '',
+    is_private: false,
+    password: '',
+    users_limit: 10
+  }
+});
 
-function validateForm() {
-  const validationErrors = [];
+// 3. Mapeamento Reativo para o Template usando useField, garantindo que o VeeValidate saberá quando o usuário digitou algo
+const { value: name } = useField('name');
+const { value: is_private } = useField('is_private');
+const { value: password } = useField('password');
+const { value: users_limit } = useField('users_limit');
 
-  if (!boardName.value.trim()) 
-    validationErrors.push('O nome da mesa é obrigatório.');
-  if (isPrivate.value && boardPassword.value.length < 4)
-    validationErrors.push('Senha deve ter pelo menos 4 caracteres.');
-  if (usersLimit.value < 1 || usersLimit.value > 1000)
-    validationErrors.push('Limite deve ser entre 1 e 1000.');
-
-  return validationErrors;
-}
-
-function clearFields(){
-    boardName = ref('');
-    isPrivate = ref(false);
-    boardPassword = ref('');
-    usersLimit = ref(10);
-    errors = ref([]);
-    loading = ref(false);
-}
-
-async function submitForm() {
-    errors.value = [];
-    loading.value = true;
-
-    const validationErrors = validateForm();
-
-    if (validationErrors.length > 0) {
-        errors.value = validationErrors;
-        loading.value = false;
-        toastStore.addToast({
-            type: 'error',
-            message: 'Erro ao criar a mesa. Verifique os campos.',
-            duration: 4000
-        });
-        return;
-    }
-
-    // Simula chamada à API
+// 4. Submissão Centralizada
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    // 1. Tenta criar
+    await boardStore.createBoard(values);
+    
+    // 2. Só chega aqui se a API retornou 200/201
+    toastStore.addToast({ type: 'success', message: 'Mesa criada! 🎉' });
+    
+    // 3. Trava o estado isSubmitting por 1 segundo
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    const payload = {
-        boardName: boardName.value,
-        isPrivate: isPrivate.value,
-        boardPassword: boardPassword.value,
-        usersLimit: usersLimit.value,
-    };
+    // 4. Fecha o Modal
+    modalsStore.closeCreateBoardModal();
 
-    console.log('Dados enviados:', payload);
-
-    toastStore.addToast({
-        type: 'success',
-        message: 'Mesa criada com sucesso! 🎉',
-        duration: 5000
-    });
-
-    loading.value = false;
-
-    // Fecha modal após 1.5s
-    setTimeout(() => {
-        modalsStore.closeCreateBoardModal();
-        clearFields();
-    }, 1500);
-}
+    // 5. Reseta os campos do formulário
+    resetForm();
+  } catch (error) {
+    if (error.response?.status === 422) {
+      setErrors(error.response.data.errors);
+      toastStore.addToast({ type: 'error', message: 'Verifique os campos.' });
+    }
+  }
+});
 </script>
 
 <template>
   <Modal
     :isVisible="modalsStore.isCreateBoardModalVisible"
     title="Criar Mesa de Jogo"
+    :loading="isSubmitting"
     @close="modalsStore.closeCreateBoardModal"
-    @confirm="submitForm"
+    @confirm="onSubmit"
   >
-    <!-- ✅ Mensagens de erro -->
-    <div v-if="errors.length" class="mb-4 bg-red-100 text-red-700 p-3 rounded-md">
-      <ul class="list-disc pl-5">
-        <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
-      </ul>
-    </div>
+    <form @submit.prevent="onSubmit" class="space-y-6">
+      <AppInput 
+        v-model="name"
+        label="Nome da Mesa:"
+        id="name"
+        :error="errors.name"
+      />
 
-    <form class="space-y-6">
-      <!-- Nome da Mesa -->
-      <div>
-        <label for="boardName" class="block text-lg font-bold">Nome da Mesa:</label>
-        <input
-          type="text"
-          id="boardName"
-          v-model="boardName"
-          required
-          class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-spice focus:border-spice sm:text-sm"
-        >
-      </div>
+      <AppRadioGroup 
+        v-model="is_private"
+        label="Visibilidade:"
+        :options="[
+          { label: 'Pública', value: false },
+          { label: 'Privada', value: true }
+        ]"
+        :error="errors.is_private"
+      />
 
-      <!-- Mesa pública ou privada -->
-      <div>
-        <label class="block text-lg font-bold mb-2">Visibilidade da Mesa:</label>
-        <div class="flex gap-4">
-          <label class="flex items-center gap-2">
-            <input type="radio" :value="false" v-model="isPrivate" />
-            Pública
-          </label>
-          <label class="flex items-center gap-2">
-            <input type="radio" :value="true" v-model="isPrivate" />
-            Privada
-          </label>
-        </div>
-      </div>
-
-      <!-- Campo de senha (apenas se privada) -->
-      <div v-if="isPrivate">
-        <label for="boardPassword" class="block text-lg font-bold">Senha da Mesa:</label>
-        <input
+      <AppInput 
+        v-if="is_private"
+          v-model="password"
           type="password"
-          id="boardPassword"
-          v-model="boardPassword"
-          class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-spice focus:border-spice sm:text-sm"
-          placeholder="Digite uma senha"
-        >
-      </div>
+          label="Senha da Mesa:"
+          id="password"
+          :error="errors.password"
+      />
 
-      <!-- Limite de usuários -->
-      <div>
-        <label class="block text-lg font-bold mb-2">Limite de Usuários:</label>
-        <div class="flex items-center gap-4">
-          <input
-            type="range"
-            min="1"
-            max="1000"
-            v-model="usersLimit"
-            class="w-full"
-          />
-          <input
-            type="number"
-            min="1"
-            max="1000"
-            v-model.number="usersLimit"
-            class="w-20 border rounded-md text-center"
-          />
-        </div>
-      </div>
+      <AppRange 
+        v-model="users_limit"
+        label="Limite de Jogadores"
+        :error="errors.users_limit"
+      />
     </form>
-
-    <!-- ✅ Loading no botão "Salvar" -->
-    <template #footer>
-      <button class="px-4 py-2 rounded-md bg-black text-white hover:text-flamingo transition-colors duration-300" :disabled="loading">
-        <span v-if="loading">Salvando...</span>
-        <span v-else>Salvar</span>
-      </button>
-    </template>
   </Modal>
 </template>
-
-

@@ -60,4 +60,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Gender::class);
     }
+
+    public function boards()
+    {
+        return $this->belongsToMany(Board::class, 'board_user')
+                    ->withPivot('is_admin')
+                    ->withTimestamps();
+    }
 }

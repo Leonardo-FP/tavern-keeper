@@ -1,6 +1,6 @@
 <script setup>
-  import Navbar from '@/components/Navbar.vue';
-  import ToastContainer from '@/components/ToastContainer.vue';
+  import Navbar from '@/components/layout/Navbar.vue';
+  import ToastContainer from '@/components/layout/ToastContainer.vue';
   import { RouterView } from 'vue-router';
   import { onMounted } from 'vue';
   import { useAuthStore  } from '@/stores/auth';

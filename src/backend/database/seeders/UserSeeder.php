@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -14,6 +15,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Usuário Admin fixo
         DB::table('users')->insert([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
@@ -24,5 +26,8 @@ class UserSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
+
+        // Criar mais usuários automaticamente
+        User::factory()->count(10)->create();
     }
 }

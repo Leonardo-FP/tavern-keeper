@@ -7,6 +7,7 @@
       default: false
     },
     title: String,
+    loading: { type: Boolean, default: false },
   });
 
   const emit = defineEmits(['close', 'confirm']);
@@ -42,7 +43,14 @@
       <!-- Rodapé fixo -->
       <footer class="flex justify-end gap-4 p-4 border-t border-black/10">
         <button @click="closeModal" class="px-4 py-2 rounded-md bg-flamingo text-white hover:text-black">Cancelar</button>
-        <button @click="onConfirm" class="px-4 py-2 rounded-md bg-black text-white hover:text-flamingo transition-colors duration-300">Salvar</button>
+        <button 
+          @click="onConfirm" 
+          :disabled="loading"
+          class="px-4 py-2 rounded-md bg-black text-white hover:text-flamingo transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span v-if="loading">Carregando...</span>
+          <span v-else>Salvar</span>
+        </button>
       </footer>
     </div>
   </div>

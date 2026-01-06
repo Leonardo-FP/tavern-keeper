@@ -1,5 +1,5 @@
 <script setup>
-    import Card from '@/components/Card.vue';
+    import Card from '@/components/layout/Card.vue';
     import ModalCreateBoard from '@/components/Boards/ModalCreate.vue';
     import { useAuthStore } from '@/stores/auth';
     import { useModalsStore  } from '@/stores/modals'; 
@@ -13,14 +13,22 @@
         <Card 
             title="Encontrar Mesas"
             content="Clique para encontrar uma mesa e começar a jogar"
-            iconSrc="/assets/icons/cards/d20.png"
+            iconSrc="/assets/icons/cards/search.png"
             iconAlt="Este é um card que permite aos jogadores entrarem em mesas"
             link="/about"
         />
         <Card
-            title="Criar Nova Mesa"
+            title="Criar Mesa"
             content="Clique para criar uma nova mesa"
             iconSrc="/assets/icons/cards/new-table.png"
+            iconAlt="Ícone para criar mesa"
+            :isButton="true"
+            @click="modalsStore.openCreateBoardModal"
+        />
+        <Card
+            title="Minhas Mesas"
+            content="Clique para acessar suas mesas"
+            iconSrc="/assets/icons/cards/d20.png"
             iconAlt="Ícone para criar mesa"
             :isButton="true"
             @click="modalsStore.openCreateBoardModal"

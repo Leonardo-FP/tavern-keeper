@@ -26,12 +26,14 @@ services:
       MYSQL_DATABASE: tavern_keeper
       MYSQL_USER: tavern_keeper_user
       MYSQL_PASSWORD: '12345678'
+      TZ: America/Sao_Paulo
     ports:
-      - "3306:3306"
+      - "3307:3306"
     networks:
       - app-network
     volumes:
       - db_data:/var/lib/mysql
+    command: --default-time-zone=America/Sao_Paulo
 
   node:
     build:
