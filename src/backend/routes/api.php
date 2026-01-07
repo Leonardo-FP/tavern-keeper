@@ -18,4 +18,6 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::apiResources([
         'boards' => BoardController::class,
     ]);
+    
+    Route::get('my-boards', [BoardController::class, 'myBoards']);
 });

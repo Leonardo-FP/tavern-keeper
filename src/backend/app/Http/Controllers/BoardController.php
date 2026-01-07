@@ -29,7 +29,9 @@ class BoardController extends Controller
 
     public function show(string $id)
     {
-        //
+        $board_details = $this->service->show($id);
+
+        return response()->json($board_details, 200);
     }
 
     public function update(Request $request, string $id)
@@ -40,5 +42,12 @@ class BoardController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function myBoards()
+    {
+        $boards = $this->service->getMyBoards();
+
+        return response()->json($boards, 200);
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Board extends Model
 {
-      protected $fillable = [
+    protected $fillable = [
         'name',
         'password',
         'is_private',
@@ -20,5 +20,13 @@ class Board extends Model
         return $this->belongsToMany(User::class, 'board_user')
                     ->withPivot('is_admin')
                     ->withTimestamps();
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:d/m/Y H:i',
+            'updated_at' => 'datetime:d/m/Y',
+        ];
     }
 }

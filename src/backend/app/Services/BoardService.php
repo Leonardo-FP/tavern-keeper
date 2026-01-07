@@ -21,4 +21,19 @@ class BoardService
 
         return $board;
     }
+
+    public function show(int $id)
+    {
+        return Board::find($id);
+    }
+
+    public function getMyBoards()
+    {
+        return auth()
+            ->user()
+            ->boards()
+            ->withCount(['users as current_players'])
+            ->latest()
+            ->paginate(6);
+    }
 }

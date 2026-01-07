@@ -1,5 +1,5 @@
 <script setup>
-    import Card from '@/components/layout/Card.vue';
+    import HomeCard from '@/components/Home/HomeCard.vue';
     import ModalCreateBoard from '@/components/Boards/ModalCreate.vue';
     import { useAuthStore } from '@/stores/auth';
     import { useModalsStore  } from '@/stores/modals'; 
@@ -10,14 +10,14 @@
 <template>
     <h1 class="mb-6 text-3xl">Olá <span class="text-flamingo">{{ authStore.user.nickname }}</span>, seja bem vindo(a)!</h1>
     <div class="flex flex-wrap justify-between gap-6 mb-6">
-        <Card 
+        <HomeCard 
             title="Encontrar Mesas"
             content="Clique para encontrar uma mesa e começar a jogar"
             iconSrc="/assets/icons/cards/search.png"
             iconAlt="Este é um card que permite aos jogadores entrarem em mesas"
             link="/about"
         />
-        <Card
+        <HomeCard
             title="Criar Mesa"
             content="Clique para criar uma nova mesa"
             iconSrc="/assets/icons/cards/new-table.png"
@@ -25,38 +25,37 @@
             :isButton="true"
             @click="modalsStore.openCreateBoardModal"
         />
-        <Card
+        <HomeCard
             title="Minhas Mesas"
-            content="Clique para acessar suas mesas"
+            content="Clique para acessar as mesas que você participa"
             iconSrc="/assets/icons/cards/d20.png"
             iconAlt="Ícone para criar mesa"
-            :isButton="true"
-            @click="modalsStore.openCreateBoardModal"
+            link="/my-boards"
         />
     </div>
     <div class="flex flex-wrap justify-between gap-6">
-        <Card 
+        <HomeCard 
             title="Em desenvolvimento"
             content="Clique para acessar o repositório do projeto no Github"
             iconSrc="/assets/icons/cards/github.png"
             iconAlt="Este é um card que permite aos jogadores acessarem o repositório do Github do projeto"
             link="/about"
         />
-        <Card 
+        <HomeCard 
             title="Sobre o projeto"
             content="Clique para saber mais sobre o Tavern Keeper"
             iconSrc="/assets/icons/cards/info-button.png"
             iconAlt="Este é um card que permite aos jogadores entenderem mais sobre o projeto"
             link="/about"
         />
-        <Card 
+        <HomeCard 
             title="Comunidade"
             content="Clique para fazer parte da nossa comunidade no Discord"
             iconSrc="/assets/icons/cards/discord.png"
             iconAlt="Este é um card que permite aos jogadores entrarem na comunidade do Discord do projeto"
             link="/about"
         />
-        <Card 
+        <HomeCard 
             title="Dúvidas frequentes"
             content="Clique para tirar as suas dúvidas"
             iconSrc="/assets/icons/cards/question.png"
@@ -67,5 +66,4 @@
     <div class="p-8">
         <ModalCreateBoard />
     </div>
-    
 </template>
