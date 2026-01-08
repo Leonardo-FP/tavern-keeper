@@ -9,8 +9,6 @@
     --color-flamingo: #f24a2c; /* Laranja Intenso */
     --color-black: #000000; /* Para legibilidade em fundos claros */
     --color-white: #ffffff; /* Para legibilidade em fundos escuros */
-
-    --shadow-cards: 0 12px 12px rgba(0, 0, 0, 0.35); 
 }
 
 /* --- Regras @font-face --- */
@@ -42,6 +40,70 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 }
 
+h1 {
+  font-size: 48px;
+}
+
+h2 {
+  font-size: 36px;
+}
+
+h3 {
+  font-size: 28px;
+}
+
+h4 {
+  font-size: 22px;
+}
+
+h5 {
+  font-size: 18px;
+}
+
+h6 {
+  font-size: 16px;
+}
+
+h1, h2 {
+  letter-spacing: 0.02em;
+}
+
+h3, h4 {
+  letter-spacing: 0.015em;
+}
+
+h5, h6 {
+  letter-spacing: 0.01em;
+}
+
 button {
   cursor: pointer;
+}
+
+/* Texto estilizado na temática de taverna */
+.text-tavern-style {
+  text-transform: uppercase;
+  color: var(--color-rajah);
+  letter-spacing: 0.04em;
+  line-height: 0.85;
+  text-shadow: 4px 4px 0px black;
+}
+
+/* Texto estilizado específico para o logo na NavBar */
+.text-tavern-logo {
+  color: black;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  min-width: 150px; /* Ajuste esse valor conforme o tamanho da fonte */
+  font-size: 2.6rem; 
+  line-height: 0.8;
+  letter-spacing: 0.02em;
+  text-shadow: 2px 2px 0px var(--color-spice);
+}
+
+.text-tavern-logo .line-2 {
+  align-self: flex-end;
+  text-align: right;
 }

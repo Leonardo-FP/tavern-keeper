@@ -12,10 +12,15 @@ const closeNav = () => (showMenu.value = false);
 </script>
 
 <template>
-  <header class="p-4 bg-santa-fe">
+  <header class="p-3 bg-santa-fe">
     <div class="container mx-auto flex justify-between items-center text-2xl">
       <nav class="container px-6 mx-auto flex items-center justify-between">
-        <h1 class="text-5xl font-bold"><RouterLink to="/">Tavern Keeper</RouterLink></h1>
+        <h1 class="font-bold">
+          <RouterLink to="/" class="text-tavern-logo">
+            <span class="line-1">Tavern</span>
+            <span class="line-2">Keeper</span>
+          </RouterLink>
+        </h1>
         <div @click="toggleNav" class="flex">
           <button type="button" aria-label="Abrir menu do usuário" class="focus:outline-none flex cursor-pointer">
             <img

@@ -3,12 +3,17 @@
     import ModalCreateBoard from '@/components/Boards/ModalCreate.vue';
     import { useAuthStore } from '@/stores/auth';
     import { useModalsStore  } from '@/stores/modals'; 
+    import AppTavernSign from '@/components/ui/AppTavernSign.vue';
 
     const authStore = useAuthStore();
     const modalsStore = useModalsStore();
 </script>
 <template>
-    <h1 class="mb-6 text-3xl">Olá <span class="text-flamingo">{{ authStore.user.nickname }}</span>, seja bem vindo(a)!</h1>
+    <AppTavernSign/>
+
+    <h2 class="text-tavern-style mb-6">
+        Olá <span class="text-flamingo">{{ authStore.user.nickname }}</span>, seja bem vindo(a)!
+    </h2>
     <div class="flex flex-wrap justify-between gap-6 mb-6">
         <HomeCard 
             title="Encontrar Mesas"

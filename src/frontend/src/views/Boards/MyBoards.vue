@@ -16,14 +16,14 @@ const loadPage = async (page) => {
 };
 
 const openBoard = (id) => {
-  router.push(`/board.show/${id}`);
+  router.push(`/boards/${id}`);
 }
 
 onMounted(() => loadPage(1));
 </script>
 
 <template>
-  <h1 class="text-4xl text-center">Minhas mesas</h1>
+  <h2 class="text-tavern-style text-center">Minhas mesas</h2>
   <div class="p-4">
     <div v-if="!loading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <BoardCard 

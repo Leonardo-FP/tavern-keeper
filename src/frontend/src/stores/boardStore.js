@@ -4,7 +4,7 @@ import api from '@/services/api';
 export const useBoardStore = defineStore('boards', {
     state: () => ({
         boards: [],
-        board: [],
+        current_board: null,
         pagination: {
             current_page: 1,
             last_page: 1
@@ -12,6 +12,11 @@ export const useBoardStore = defineStore('boards', {
     }),
 
     actions: {
+
+        clearCurrentBoard() {
+            this.current_board = {}
+        },
+        
         async createBoard(payload) {
             try {
                 const response = await api.post('/boards', payload);
@@ -36,8 +41,6 @@ export const useBoardStore = defineStore('boards', {
                     current_page: response.data.current_page,
                     last_page: response.data.last_page
                 };
-
-                console.log(this.boards)
             } catch (error) {
                 throw error;
             }
@@ -45,10 +48,11 @@ export const useBoardStore = defineStore('boards', {
 
         async showBoard(id) {
             try {
-                const response = await api.get(`/board-show/${id}`);
-                this.board.push(response.data);
+                const response = await api.get(`/boards/${id}`);
+                this.current_board = response.data;
 
                 return response.data; 
+
             } catch (error) {
                 throw error;
             }

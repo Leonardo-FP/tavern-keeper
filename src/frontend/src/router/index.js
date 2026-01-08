@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/Home/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import MyBoards from '../views/Boards/MyBoards.vue'
+import BoardShow from '../views/Boards/BoardShow.vue'
 import BoardEdit from '../views/Boards/BoardEdit.vue'
 import NotFound from '../views/NotFound.vue'
 import LoginPage from '../views/Auth/LoginPage.vue'
@@ -16,25 +17,46 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      meta: { requiresAuth: true }
+      meta: { 
+        requiresAuth: true,
+        layoutClass: 'home-background'
+      }
     },
     {
       path: '/about',
       name: 'about',
       component: AboutView,
-      meta: { requiresAuth: true }
+      meta: { 
+        requiresAuth: true,
+        layoutClass: 'board-background'
+      }
     },
     {
       path: '/my-boards',
       name: 'my-boards',
       component: MyBoards,
-      meta: { requiresAuth: true }
+      meta: { 
+        requiresAuth: true,
+        layoutClass: 'board-background'
+      }
     },
     {
-      path: `/board-show/:id`,
+      path: '/boards/:id',
       name: 'board-show',
+      component: BoardShow,
+      meta: { 
+        requiresAuth: true,
+        layoutClass: 'board-background'
+      }
+    },
+    {
+      path: '/boards/:id/edit',
+      name: 'board-edit',
       component: BoardEdit,
-      meta: { requiresAuth: true }
+      meta: { 
+        requiresAuth: true,
+        layoutClass: 'board-background'
+      }
     },
     {
       path: '/login',

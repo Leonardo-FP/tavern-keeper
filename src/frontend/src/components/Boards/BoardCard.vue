@@ -13,7 +13,6 @@
         <h3 class="text-xl font-bold italic">{{ board.name }}</h3>
         </div>
       <div class="text-sm text-left font-medium text-black/70">
-
         <p v-if="board.is_private" class="flex">
           <LockClosedIcon class="w-5 mr-1" /> 
           <span>Privada</span>
