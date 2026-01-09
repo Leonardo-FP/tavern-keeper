@@ -4,7 +4,7 @@
       <div class="sign">
         <div class="sign-content">
           <h1 class="title">TAVERN KEEPER</h1>
-          <span class="subtitle">Onde as lendas nascem</span>
+          <span class="subtitle">Toda aventura começa numa taverna</span>
         </div>
         <span class="chain left"></span>
         <span class="chain right"></span>
@@ -28,7 +28,7 @@
 
 .sign {
   position: relative;
-  width: 550px; 
+  width: 470px; 
   height: 250px;
   background-color: var(--color-spice);
   background-image: 

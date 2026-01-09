@@ -89,6 +89,17 @@ button {
   text-shadow: 4px 4px 0px black;
 }
 
+/* Texto alternativo estilizado na temática de taverna */
+.text-tavern-style-alt {
+  font-family: 'Draconis'; 
+  font-weight: bold;
+  color: black;
+  text-transform: uppercase;
+  line-height: 0.8;
+  letter-spacing: 0.02em;
+  text-shadow: 1.3px 1.3px 0px var(--color-spice);
+}
+
 /* Texto estilizado específico para o logo na NavBar */
 .text-tavern-logo {
   color: black;
