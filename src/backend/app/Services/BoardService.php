@@ -24,7 +24,8 @@ class BoardService
 
     public function show(int $id)
     {
-        return Board::find($id);
+        return Board::with('campaigns.status')
+            ->findOrFail($id);
     }
 
     public function getMyBoards()

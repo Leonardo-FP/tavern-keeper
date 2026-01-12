@@ -36,28 +36,16 @@
                 <div class="medieval-frame-content">
                     <AppTable>
                         <template #body>
-                            <tr class="text-xl">
-                                <td class="text-tavern-style-alt">A Maldição do Elfo</td>
+                            <tr v-for="campaign in current_board?.campaigns" 
+                                :key="campaign.id"
+                                class="text-xl"
+                            >
+                                <td class="text-tavern-style-alt">{{ campaign.name }}</td>
                                 <td>
-                                    <span class="status andamento">Andamento</span>
-                                </td>
-                                <td>
-                                    <button class="btn-medieval">Abrir</button>
-                                </td>
-                            </tr>
-                            <tr class="text-xl">
-                                <td class="text-tavern-style-alt">A Maldição do Elfo</td>
-                                <td>
-                                    <span class="status concluida">Concluída</span>
-                                </td>
-                                <td>
-                                    <button class="btn-medieval">Abrir</button>
-                                </td>
-                            </tr>
-                            <tr class="text-xl">
-                                <td class="text-tavern-style-alt">A Maldição do Elfo</td>
-                                <td>
-                                    <span class="status cancelada">Cancelada</span>
+                                    <span 
+                                        class="status"
+                                        :class="campaign.status?.name?.toLowerCase()"    
+                                    >{{ campaign.status?.name ?? '-' }}</span>
                                 </td>
                                 <td>
                                     <button class="btn-medieval">Abrir</button>

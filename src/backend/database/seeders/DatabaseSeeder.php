@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             IconSeeder::class,
             UserSeeder::class,
             BoardSeeder::class,
+            StatusSeeder::class,
+            CampaignSeeder::class,
         ]);
     }
 }
