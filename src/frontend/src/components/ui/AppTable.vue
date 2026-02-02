@@ -74,22 +74,4 @@
         background: rgba(140, 60, 60, 0.5);
         color: #5a2b2b;
     }
-
-    .btn-medieval {
-        border: 1px solid #3b2415;
-        padding: 6px 12px;
-        border-radius: 4px;
-        font-size: 0.8em;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        transition: all 0.15s ease;
-    }
-
-    .btn-medieval:hover {
-        background: var(--color-flamingo);
-        color: black;
-    }
-
-    .btn-medieval:active {
-        transform: translateY(1px);
-    }
 </style>

@@ -2,10 +2,7 @@
   import { defineProps, defineEmits } from 'vue';
 
   const props = defineProps({
-    isVisible: {
-      type: Boolean,
-      default: false
-    },
+    isVisible: { type: Boolean, default: false },
     title: String,
     loading: { type: Boolean, default: false },
   });

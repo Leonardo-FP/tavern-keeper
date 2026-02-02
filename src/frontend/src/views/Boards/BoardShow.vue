@@ -2,10 +2,15 @@
     import { useBoardStore } from '@/stores/boardStore'
     import { onBeforeRouteLeave, useRoute } from 'vue-router'
     import { storeToRefs } from 'pinia';
-    import { onMounted } from 'vue';
+    import { computed, onMounted } from 'vue';
     import AppTable from '@/components/ui/AppTable.vue';
+    import { Cog6ToothIcon } from '@heroicons/vue/24/solid';
+    import { useModalsStore } from '@/stores/modals';
+    import ModalEditBoard from '@/components/Boards/ModalEditBoard.vue';
+    import AppBackButton from '@/components/ui/AppBackButton.vue';
 
     const boardStore = useBoardStore();
+    const modalsStore = useModalsStore();
     const route = useRoute();
 
     onMounted(() => {
@@ -15,7 +20,19 @@
 
     // Armazena o valor da mesa atual em uma constante para facilitar o acesso
     const { current_board } = storeToRefs(boardStore);
-    
+
+    // Limpa a senha e envia os dados corretos para edição
+    const editBoardInitialValues = computed(() => {
+    if (!current_board.value) return null;
+
+    return {
+        name: current_board.value.name,
+        is_private: current_board.value.is_private,
+        password: '', // 👈 limpa aqui
+        users_limit: current_board.value.users_limit,
+    };
+    });
+
     onBeforeRouteLeave((to, from, next) => {
         // se o destino NÃO for uma rota de board
         if (!to.path.startsWith('/boards')) {
@@ -27,8 +44,17 @@
 </script>
 
 <template>
-    <h2 class="text-tavern-style mb-10">Mesa: {{ current_board?.name }}</h2>
-    <div class="grid grid-cols-12 gap-10 mt-4">
+    <div class="relative flex items-center justify-evenly h-12">
+        <AppBackButton route="/my-boards" />
+
+        <h2 class="text-tavern-style">Mesa: {{ current_board?.name }}</h2>
+
+        <button class="absolute right-4 flex items-center btn-medieval" @click="modalsStore.openModal('edit-board')">
+            <Cog6ToothIcon class="w-5 mr-1"/> 
+            <span>Configurações da Mesa</span>
+        </button>
+    </div>
+    <div class="grid grid-cols-12 gap-10 mt-14">
         <div class="col-span-7">
             <h3 class="text-tavern-style text-center mb-4">Lista de Campanhas</h3>
 
@@ -76,6 +102,12 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="p-8">
+        <ModalEditBoard
+            v-if="editBoardInitialValues"
+            :initialValues="editBoardInitialValues"
+        />
     </div>
 </template>
 

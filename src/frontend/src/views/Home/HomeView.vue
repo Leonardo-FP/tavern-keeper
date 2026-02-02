@@ -1,6 +1,6 @@
 <script setup>
     import HomeCard from '@/components/Home/HomeCard.vue';
-    import ModalCreateBoard from '@/components/Boards/ModalCreate.vue';
+    import ModalCreateBoard from '@/components/Boards/ModalCreateBoard.vue';
     import { useAuthStore } from '@/stores/auth';
     import { useModalsStore  } from '@/stores/modals'; 
     import AppTavernSign from '@/components/ui/AppTavernSign.vue';
@@ -28,7 +28,7 @@
             iconSrc="/assets/icons/cards/new-table.png"
             iconAlt="Ícone para criar mesa"
             :isButton="true"
-            @click="modalsStore.openCreateBoardModal"
+            @click="modalsStore.openModal('create-board')"
         />
         <HomeCard
             title="Minhas Mesas"

@@ -34,9 +34,11 @@ class BoardController extends Controller
         return response()->json($board_details, 200);
     }
 
-    public function update(Request $request, string $id)
+    public function update(BoardStoreRequest $request, string $id)
     {
-        //
+        $board = $this->service->update($request->validated(), $id);
+
+        return response()->json($board, 201);
     }
 
     public function destroy(string $id)

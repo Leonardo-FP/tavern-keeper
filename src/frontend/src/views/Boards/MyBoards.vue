@@ -3,6 +3,7 @@ import BoardCard from '@/components/Boards/BoardCard.vue';
 import { onMounted, ref } from 'vue';
 import { useBoardStore } from '@/stores/boardStore';
 import router from '@/router';
+import AppBackButton from '@/components/ui/AppBackButton.vue';
 
 const boardStore = useBoardStore();
 const loading = ref(true);
@@ -23,7 +24,14 @@ onMounted(() => loadPage(1));
 </script>
 
 <template>
-  <h2 class="text-tavern-style text-center">Minhas mesas</h2>
+  <div class="relative flex items-center justify-center h-12">
+  
+    <!-- Botão à esquerda -->
+    <AppBackButton route="/" />
+
+    <!-- Título centralizado -->
+    <h2 class="text-tavern-style text-center">Minhas mesas</h2>
+  </div>
   <div class="p-4">
     <div v-if="!loading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <BoardCard 

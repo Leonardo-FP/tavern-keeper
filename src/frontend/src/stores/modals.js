@@ -2,19 +2,20 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useModalsStore = defineStore('modals', () => {
-    const isCreateBoardModalVisible = ref(false);
+    
+    const activeModal = ref(null);
 
-    const openCreateBoardModal = () => {
-        isCreateBoardModalVisible.value = true;
-    };
+    const openModal = (type) => {
+        activeModal.value = type;
+    }
 
-    const closeCreateBoardModal = () => {
-        isCreateBoardModalVisible.value = false;
-    };
+    const closeModal = () => {
+        activeModal.value = null;
+    }
 
     return {
-        isCreateBoardModalVisible,
-        openCreateBoardModal,
-        closeCreateBoardModal,
+        activeModal, 
+        openModal, 
+        closeModal,
     };
 });

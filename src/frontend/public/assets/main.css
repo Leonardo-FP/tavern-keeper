@@ -118,3 +118,18 @@ button {
   align-self: flex-end;
   text-align: right;
 }
+
+/* Estilização básica de botões */
+.btn-medieval {
+  font-family: 'Draconis';
+  font-size: 1.25rem;
+  background-color: var(--color-di-serria);
+  border: 2px solid black;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.btn-medieval:hover {
+    background: var(--color-flamingo);
+    color: black;
+}
