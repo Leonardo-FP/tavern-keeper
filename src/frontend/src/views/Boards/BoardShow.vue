@@ -4,9 +4,10 @@
     import { storeToRefs } from 'pinia';
     import { computed, onMounted } from 'vue';
     import AppTable from '@/components/ui/AppTable.vue';
-    import { Cog6ToothIcon } from '@heroicons/vue/24/solid';
+    import { Cog6ToothIcon, XMarkIcon } from '@heroicons/vue/24/solid';
     import { useModalsStore } from '@/stores/modals';
     import ModalEditBoard from '@/components/Boards/ModalEditBoard.vue';
+    import ModalRemoveUserFromBoard from '@/components/Boards/ModalRemoveUserFromBoard.vue';
     import AppBackButton from '@/components/ui/AppBackButton.vue';
 
     const boardStore = useBoardStore();
@@ -21,16 +22,9 @@
     // Armazena o valor da mesa atual em uma constante para facilitar o acesso
     const { current_board } = storeToRefs(boardStore);
 
-    // Limpa a senha e envia os dados corretos para edição
-    const editBoardInitialValues = computed(() => {
-    if (!current_board.value) return null;
-
-    return {
-        name: current_board.value.name,
-        is_private: current_board.value.is_private,
-        password: '', // 👈 limpa aqui
-        users_limit: current_board.value.users_limit,
-    };
+    // Verifica se existem campanhas nessa mesa
+    const hasCampaigns = computed(() => {
+        return current_board.value?.campaigns?.length > 0;
     });
 
     onBeforeRouteLeave((to, from, next) => {
@@ -49,7 +43,11 @@
 
         <h2 class="text-tavern-style">Mesa: {{ current_board?.name }}</h2>
 
-        <button class="absolute right-4 flex items-center btn-medieval" @click="modalsStore.openModal('edit-board')">
+        <button 
+            v-if="current_board?.is_logged_user_admin"
+            class="absolute right-4 flex items-center btn-medieval" 
+            @click="modalsStore.openModal('edit-board')"
+        >
             <Cog6ToothIcon class="w-5 mr-1"/> 
             <span>Configurações da Mesa</span>
         </button>
@@ -62,17 +60,34 @@
                 <div class="medieval-frame-content">
                     <AppTable>
                         <template #body>
-                            <tr v-for="campaign in current_board?.campaigns" 
+                            <tr v-if="!hasCampaigns">
+                                <td
+                                    colspan="3"
+                                    class="text-center text-tavern-style-alt text-xl"
+                                >
+                                    Nenhuma campanha encontrada
+                                </td>
+                            </tr>
+
+                            <tr
+                                v-else
+                                v-for="campaign in current_board.campaigns"
                                 :key="campaign.id"
                                 class="text-xl"
                             >
-                                <td class="text-tavern-style-alt">{{ campaign.name }}</td>
-                                <td>
-                                    <span 
-                                        class="status"
-                                        :class="campaign.status?.name?.toLowerCase()"    
-                                    >{{ campaign.status?.name ?? '-' }}</span>
+                                <td class="text-tavern-style-alt">
+                                    {{ campaign.name }}
                                 </td>
+
+                                <td>
+                                    <span
+                                        class="status"
+                                        :class="campaign.status?.name?.toLowerCase()"
+                                        >
+                                        {{ campaign.status?.name ?? '-' }}
+                                    </span>
+                                </td>
+
                                 <td>
                                     <button class="btn-medieval">Abrir</button>
                                 </td>
@@ -88,7 +103,22 @@
             
             <div class="medieval-frame">
                 <div class="medieval-frame-content">
-                    a
+                      <AppTable>
+                        <template #body>
+                            <tr v-for="user in current_board?.users" 
+                                :key="user.id"
+                                class="text-xl"
+                            >
+                                <td class="text-tavern-style-alt">• {{ user.nickname }}</td>
+
+                                <td>
+                                    <button class="btn-medieval" @click="modalsStore.openModal('remove-user-board')">
+                                        <XMarkIcon class="w-5 mr-1" />
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                    </AppTable>
                 </div>
             </div>
         </div>
@@ -98,15 +128,21 @@
             
             <div class="medieval-frame">
                 <div class="medieval-frame-content">
-                    a
+                    
                 </div>
             </div>
         </div>
     </div>
     <div class="p-8">
         <ModalEditBoard
-            v-if="editBoardInitialValues"
-            :initialValues="editBoardInitialValues"
+            v-if="current_board"
+            :initialValues="current_board"
+        />
+    </div>
+    <div class="p-8">
+        <ModalRemoveUserFromBoard
+            v-if="current_board"
+            :initialValues="current_board"
         />
     </div>
 </template>

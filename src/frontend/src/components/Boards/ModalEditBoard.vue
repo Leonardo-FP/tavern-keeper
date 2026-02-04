@@ -24,9 +24,29 @@ const onConfirm = () => {
 };
 
 const updateBoard = async (values) => {
-  await boardStore.updateBoard(values);
-  toastStore.addToast({ type: 'success', message: 'Mesa editada! 🎉' });
-  modalsStore.closeModal();
+  try {
+
+    await boardStore.updateBoard(values);
+    
+    toastStore.addToast({ 
+      type: 'success', 
+      message: 'Mesa editada com sucesso!' 
+    });
+    
+    modalsStore.closeModal(); 
+
+  } catch (error){
+
+    if(error.response?.status === 403) {
+      toastStore.addToast({
+        type: 'error', 
+        message: 'Você não tem permissão para editar esta mesa.'
+      });
+    }
+
+    modalsStore.closeModal();
+  }
+
 };
 </script>
 

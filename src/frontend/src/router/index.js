@@ -3,7 +3,6 @@ import HomeView from '../views/Home/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import MyBoards from '../views/Boards/MyBoards.vue'
 import BoardShow from '../views/Boards/BoardShow.vue'
-import BoardEdit from '../views/Boards/BoardEdit.vue'
 import NotFound from '../views/NotFound.vue'
 import LoginPage from '../views/Auth/LoginPage.vue'
 import RegisterPage from '../views/Auth/RegisterPage.vue'
@@ -44,15 +43,6 @@ const router = createRouter({
       path: '/boards/:id',
       name: 'board-show',
       component: BoardShow,
-      meta: { 
-        requiresAuth: true,
-        layoutClass: 'board-background'
-      }
-    },
-    {
-      path: '/boards/:id/edit',
-      name: 'board-edit',
-      component: BoardEdit,
       meta: { 
         requiresAuth: true,
         layoutClass: 'board-background'

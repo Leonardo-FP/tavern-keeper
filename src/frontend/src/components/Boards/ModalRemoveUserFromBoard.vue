@@ -12,41 +12,24 @@ const boardStore = useBoardStore();
 
 const boardFormRef = ref(null);
 
-const emptyBoard = {
-  name: '',
-  is_private: false,
-  password: '',
-  users_limit: 10
-};
+const props = defineProps({
+  initialValues: {
+    type: Object,
+    required: true
+  }
+});
 
-const onConfirm = () => {
-  boardFormRef.value.submit();
-};
 
-const createBoard = async (values) => {
-  await boardStore.createBoard(values);
-  
-  toastStore.addToast({ 
-    type: 'success', 
-    message: 'Mesa criada com sucesso!' 
-  });
-  
-  modalsStore.closeModal();
-};
 </script>
 
 <template>
   <Modal
-    :isVisible="modalsStore.activeModal === 'create-board'"
-    title="Criar Mesa de Jogo"
+    :isVisible="modalsStore.activeModal === 'remove-user-board'"
+    title="Remover usuário da mesa"
     :loading="boardFormRef?.isSubmitting"
     @close="modalsStore.closeModal()"
     @confirm="onConfirm"
   >
-    <BoardForm
-      ref="boardFormRef"
-      :initialValues="emptyBoard"
-      @submit="createBoard"
-    />
+   
   </Modal>
 </template>

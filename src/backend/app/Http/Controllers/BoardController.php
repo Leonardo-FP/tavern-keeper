@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BoardStoreRequest;
-use Illuminate\Http\Request;
+use App\Models\Board;
 use App\Services\BoardService;
 
 class BoardController extends Controller
@@ -36,9 +36,16 @@ class BoardController extends Controller
 
     public function update(BoardStoreRequest $request, string $id)
     {
-        $board = $this->service->update($request->validated(), $id);
+        $board = Board::findOrFail($id);
+        
+        $this->authorize('update', $board);
 
-        return response()->json($board, 201);
+        $board = $this->service->update(
+            $request->validated(),
+            $board
+        );
+
+        return response()->json($board, 200);
     }
 
     public function destroy(string $id)

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Board;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\BoardResource;
 
 class BoardService
 {
@@ -22,10 +23,8 @@ class BoardService
         return $board;
     }
 
-    public function update(array $data, int $id): Board
+    public function update(array $data, Board $board)
     {
-        $board = Board::findOrFail($id);
-
         $board->name = $data['name'];
         $board->is_private = $data['is_private'];
         $board->users_limit = $data['users_limit'];
@@ -45,10 +44,11 @@ class BoardService
         return $board;
     }
 
-    public function show(int $id)
+    public function show($id)
     {
-        return Board::with('campaigns.status')
-            ->findOrFail($id);
+        $board = Board::with(['campaigns.status', 'users'])->findOrFail($id);
+
+        return new BoardResource($board);
     }
 
     public function getMyBoards()
