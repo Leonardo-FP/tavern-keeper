@@ -20,4 +20,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
     ]);
     
     Route::get('my-boards', [BoardController::class, 'myBoards']);
+
+    Route::delete('/boards/{board_id}/users/{user_id}', [BoardController::class, 'removeUser']);
+    Route::delete('/boards/{board_id}/leave', [BoardController::class, 'leave']);
 });

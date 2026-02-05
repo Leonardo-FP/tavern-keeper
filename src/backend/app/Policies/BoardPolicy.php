@@ -49,6 +49,14 @@ class BoardPolicy
     }
 
     /**
+     * Determine whether the user can remove users of the model.
+     */
+    public function removeUsers(User $user, Board $board): bool
+    {
+        return $board->isAdmin($user);
+    }
+
+    /**
      * Determine whether the user can restore the model.
      */
     public function restore(User $user, Board $board): bool

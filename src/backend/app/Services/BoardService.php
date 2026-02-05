@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Board;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\BoardResource;
+use App\Models\User;
 
 class BoardService
 {
@@ -59,5 +60,27 @@ class BoardService
             ->withCount(['users as current_players'])
             ->latest()
             ->paginate(6);
+    }
+
+    public function removeUser(Board $board, User $user)
+    {
+        if(!$board->users()->where('user_id', $user->id)->exists()){
+            throw new \Exception('Usuário não pertence a esta mesa');
+        }
+
+        $board->users()->detach($user->id);
+
+        return true;
+    }
+
+    public function leave(Board $board, User $user)
+    {
+        if(!$board->users()->where('user_id', $user->id)->exists()){
+            throw new \Exception('Você não pertence à mesa para deixá-la.');
+        }
+
+        $board->users()->detach($user->id);
+
+        return true;
     }
 }

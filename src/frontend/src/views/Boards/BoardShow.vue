@@ -1,18 +1,21 @@
 <script setup>
     import { useBoardStore } from '@/stores/boardStore'
+    import { useModalsStore } from '@/stores/modals';
+    import { useAuthStore } from '@/stores/auth';
     import { onBeforeRouteLeave, useRoute } from 'vue-router'
     import { storeToRefs } from 'pinia';
-    import { computed, onMounted } from 'vue';
+    import { ref, computed, onMounted } from 'vue';
     import AppTable from '@/components/ui/AppTable.vue';
-    import { Cog6ToothIcon, XMarkIcon } from '@heroicons/vue/24/solid';
-    import { useModalsStore } from '@/stores/modals';
+    import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon, XMarkIcon } from '@heroicons/vue/24/solid';
     import ModalEditBoard from '@/components/Boards/ModalEditBoard.vue';
     import ModalRemoveUserFromBoard from '@/components/Boards/ModalRemoveUserFromBoard.vue';
     import AppBackButton from '@/components/ui/AppBackButton.vue';
+import ModalLeaveBoard from '@/components/Boards/ModalLeaveBoard.vue';
 
     const boardStore = useBoardStore();
     const modalsStore = useModalsStore();
     const route = useRoute();
+    const authStore = useAuthStore();
 
     onMounted(() => {
         // Carrega as informações da mesa na boardStore
@@ -21,11 +24,29 @@
 
     // Armazena o valor da mesa atual em uma constante para facilitar o acesso
     const { current_board } = storeToRefs(boardStore);
+    
+    // Armazena o vaor do membro da mesa que está selecionado
+    const selectedUser = ref(null);
 
     // Verifica se existem campanhas nessa mesa
     const hasCampaigns = computed(() => {
         return current_board.value?.campaigns?.length > 0;
     });
+
+    // Verifica se o usuário logado pode remover os outros da mesa
+    const canRemoveUser = (user) => {
+        return (
+            current_board.value?.is_logged_user_admin &&
+            authStore.user &&
+            user.id !== authStore.user.id
+        );
+    };
+
+    // Função para abrir modal e setar usuário
+    const openRemoveUserModal = (user) => {
+        selectedUser.value = user;
+        modalsStore.openModal('remove-user-board');
+    }
 
     onBeforeRouteLeave((to, from, next) => {
         // se o destino NÃO for uma rota de board
@@ -38,19 +59,30 @@
 </script>
 
 <template>
-    <div class="relative flex items-center justify-evenly h-12">
+    <div class="relative flex items-center justify-evenly h-18">
         <AppBackButton route="/my-boards" />
 
         <h2 class="text-tavern-style">Mesa: {{ current_board?.name }}</h2>
 
-        <button 
-            v-if="current_board?.is_logged_user_admin"
-            class="absolute right-4 flex items-center btn-medieval" 
-            @click="modalsStore.openModal('edit-board')"
-        >
-            <Cog6ToothIcon class="w-5 mr-1"/> 
-            <span>Configurações da Mesa</span>
-        </button>
+        <div class="absolute right-4">
+            <button 
+                v-if="current_board?.is_logged_user_admin"
+                class="flex items-center btn-medieval" 
+                @click="modalsStore.openModal('edit-board')"
+            >
+                <Cog6ToothIcon class="w-5 mr-1"/> 
+                <span>Configurações da Mesa</span>
+            </button>
+
+            <button 
+                class="flex items-center btn-medieval" 
+                @click="modalsStore.openModal('leave-board')"
+            >
+                <ArrowRightStartOnRectangleIcon class="w-5 mr-1"/> 
+                <span>Sair da Mesa</span>
+            </button>
+        </div>
+        
     </div>
     <div class="grid grid-cols-12 gap-10 mt-14">
         <div class="col-span-7">
@@ -112,7 +144,11 @@
                                 <td class="text-tavern-style-alt">• {{ user.nickname }}</td>
 
                                 <td>
-                                    <button class="btn-medieval" @click="modalsStore.openModal('remove-user-board')">
+                                    <button 
+                                        v-if="canRemoveUser(user)"
+                                        class="btn-medieval" 
+                                        @click="openRemoveUserModal(user)"
+                                    >
                                         <XMarkIcon class="w-5 mr-1" />
                                     </button>
                                 </td>
@@ -141,8 +177,17 @@
     </div>
     <div class="p-8">
         <ModalRemoveUserFromBoard
-            v-if="current_board"
-            :initialValues="current_board"
+            v-if="modalsStore.activeModal === 'remove-user-board'"
+            :user="selectedUser"
+            :board="current_board"
+            @close="modalsStore.closeModal"
+        />
+    </div>
+    <div class="p-8">
+        <ModalLeaveBoard
+            v-if="modalsStore.activeModal === 'leave-board'"
+            :board="current_board"
+            @close="modalsStore.closeModal"
         />
     </div>
 </template>

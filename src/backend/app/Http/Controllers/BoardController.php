@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BoardStoreRequest;
 use App\Models\Board;
+use App\Models\User;
 use App\Services\BoardService;
 
 class BoardController extends Controller
@@ -58,5 +59,27 @@ class BoardController extends Controller
         $boards = $this->service->getMyBoards();
 
         return response()->json($boards, 200);
+    }
+
+    public function removeUser($board_id, $user_id)
+    {
+        $board = Board::findOrFail($board_id);
+        $user = User::findOrFail($user_id);
+
+        $this->authorize('removeUsers', $board);
+
+        $this->service->removeUser($board, $user);
+
+        return response()->noContent();
+    }
+
+    public function leave($board_id)
+    {
+        $board = Board::findOrFail($board_id);
+        $user = auth()->user();
+
+        $this->service->leave($board, $user);
+
+        return response()->noContent();
     }
 }

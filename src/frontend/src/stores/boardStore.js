@@ -24,7 +24,6 @@ export const useBoardStore = defineStore('boards', {
                 
                 return response.data; 
             } catch (error) {
-                // Não captura aqui o erro com Toasts, lança ele para que o Componente (que tem o formulário) possa decidir o que fazer (ex: setErrors no VeeValidate).
                 throw error;
             }
         },
@@ -39,7 +38,6 @@ export const useBoardStore = defineStore('boards', {
 
                 return response.data; 
             } catch (error) {
-                // Não captura aqui o erro com Toasts, lança ele para que o Componente (que tem o formulário) possa decidir o que fazer (ex: setErrors no VeeValidate).
                 throw error;
             }
         },
@@ -51,7 +49,7 @@ export const useBoardStore = defineStore('boards', {
                 // O Laravel Paginate coloca os dados dentro de .data
                 this.boards = response.data.data; 
                 
-                // Guardamos o estado da paginação
+                // Guarda o estado da paginação
                 this.pagination = {
                     current_page: response.data.current_page,
                     last_page: response.data.last_page
@@ -69,6 +67,25 @@ export const useBoardStore = defineStore('boards', {
                 return response.data; 
 
             } catch (error) {
+                throw error;
+            }
+        },
+
+        async removeUserFromBoard(userId, boardId) {
+            await api.delete(`/boards/${boardId}/users/${userId}`);
+
+            // Filtra a lista, removendo o usuário que foi deletado
+            this.current_board.users = this.current_board.users.filter(
+                user => user.id !== userId
+            );
+        },
+
+        async leaveBoard(boardId) {
+            try {
+
+                await api.delete(`/boards/${boardId}/leave`);
+                
+            } catch(error) {
                 throw error;
             }
         }
