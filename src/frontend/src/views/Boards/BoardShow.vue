@@ -10,7 +10,7 @@
     import ModalEditBoard from '@/components/Boards/ModalEditBoard.vue';
     import ModalRemoveUserFromBoard from '@/components/Boards/ModalRemoveUserFromBoard.vue';
     import AppBackButton from '@/components/ui/AppBackButton.vue';
-import ModalLeaveBoard from '@/components/Boards/ModalLeaveBoard.vue';
+    import ModalLeaveBoard from '@/components/Boards/ModalLeaveBoard.vue';
 
     const boardStore = useBoardStore();
     const modalsStore = useModalsStore();
@@ -114,7 +114,7 @@ import ModalLeaveBoard from '@/components/Boards/ModalLeaveBoard.vue';
                                 <td>
                                     <span
                                         class="status"
-                                        :class="campaign.status?.name?.toLowerCase()"
+                                        :style="{ backgroundColor: campaign.status?.status_color ?? '#8C7A6B' }"
                                         >
                                         {{ campaign.status?.name ?? '-' }}
                                     </span>

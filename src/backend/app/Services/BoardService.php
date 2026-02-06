@@ -75,12 +75,42 @@ class BoardService
 
     public function leave(Board $board, User $user)
     {
-        if(!$board->users()->where('user_id', $user->id)->exists()){
+        if (!$board->users()->where('user_id', $user->id)->exists()) {
             throw new \Exception('Você não pertence à mesa para deixá-la.');
         }
 
+        $membersCount = $board->users()->count();
+        $userIsAdmin = $board->isAdmin($user);
+
+        // Caso 1: único membro
+        if ($membersCount === 1) {
+            $board->users()->detach($user->id);
+            $board->delete();
+            return true;
+        }
+
+        // Caso 2: é admin e é o único admin
+        if ($userIsAdmin) {
+            $adminsCount = $board->users()->wherePivot('is_admin', 1)->count();
+
+            if ($adminsCount === 1) {
+                $newAdmin = $board->users()
+                    ->where('user_id', '!=', $user->id)
+                    ->orderByPivot('created_at', 'asc')
+                    ->first();
+
+                if ($newAdmin) {
+                    $board->users()->updateExistingPivot($newAdmin->id, [
+                        'is_admin' => 1
+                    ]);
+                }
+            }
+        }
+
+        // Caso padrão: só sai
         $board->users()->detach($user->id);
 
         return true;
     }
+
 }

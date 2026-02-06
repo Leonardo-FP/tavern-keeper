@@ -53,25 +53,6 @@
         letter-spacing: 0.04em;
         padding: 2px 6px;
         border-radius: 2px;
-        background: rgba(0, 0, 0, 1);
-        color: #2b1a0f;
-    }
-
-    /* Andamento */
-    .status.andamento {
-        background: rgba(160, 110, 40, 0.5);
-        color: #5a3b16;
-    }
-
-    /* Concluída */
-    .status.concluida {
-        background: rgba(70, 120, 80, 0.5);
-        color: #2f5a3a;
-    }
-
-    /* Cancelada */
-    .status.cancelada {
-        background: rgba(140, 60, 60, 0.5);
-        color: #5a2b2b;
+        color: white;
     }
 </style>

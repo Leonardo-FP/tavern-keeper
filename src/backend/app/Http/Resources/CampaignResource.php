@@ -18,6 +18,7 @@ class CampaignResource extends JsonResource
                 fn () => [
                     'id'   => $this->status->id,
                     'name' => $this->status->name,
+                    'status_color' => $this->status->status_color,
                 ]
             ),
         ];
