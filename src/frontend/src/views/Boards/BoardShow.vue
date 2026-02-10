@@ -111,7 +111,7 @@
                                     {{ campaign.name }}
                                 </td>
 
-                                <td>
+                                <td class="text-center">
                                     <span
                                         class="status"
                                         :style="{ backgroundColor: campaign.status?.status_color ?? '#8C7A6B' }"
@@ -121,7 +121,7 @@
                                 </td>
 
                                 <td>
-                                    <button class="btn-medieval">Abrir</button>
+                                    <button class="btn-medieval text-sm">Abrir</button>
                                 </td>
                             </tr>
                         </template>

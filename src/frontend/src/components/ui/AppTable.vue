@@ -45,14 +45,4 @@
     .medieval-table tbody tr:last-child td {
         border-bottom: none;
     }
-
-    .status {
-        font-size: 0.75rem;
-        font-weight: 600;
-        font-size: 0.7em;
-        letter-spacing: 0.04em;
-        padding: 2px 6px;
-        border-radius: 2px;
-        color: white;
-    }
 </style>

@@ -121,8 +121,7 @@ button {
 
 /* Estilização básica de botões */
 .btn-medieval {
-  font-family: 'Draconis';
-  font-size: 1.25rem;
+  font-weight: 600;
   background-color: var(--color-di-serria);
   border: 2px solid black;
   padding: 6px 12px;
@@ -132,4 +131,15 @@ button {
 .btn-medieval:hover {
     background: var(--color-flamingo);
     color: black;
+}
+
+/* Estilização básica dos status em listagens */
+.status {
+  font-weight: 600;
+  font-size: 0.75em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  color: rgb(0, 0, 0);
+  border-radius: 15px;
+  border: 1px solid black;
 }
