@@ -26,17 +26,21 @@ WORKDIR /var/www
 # Copiar apenas arquivos do Composer
 COPY ./src/backend/composer.* /var/www/
 
-# Instalar dependências sem rodar scripts
+# Instalar dependências
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-# Copiar o restante do projeto
+# Copiar projeto
 COPY ./src/backend /var/www
 
-# Rodar scripts agora que artisan existe
+# Rodar scripts do Laravel
 RUN php artisan package:discover --ansi
 
-# Expor a porta 9000
+# 👇 copiar entrypoint
+COPY docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 9000
 
-# Rodar o PHP-FPM
-CMD ["php-fpm"]
+# 👇 definir entrypoint
+ENTRYPOINT ["entrypoint.sh"]
