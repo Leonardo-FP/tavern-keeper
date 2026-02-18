@@ -6,11 +6,12 @@
     import { storeToRefs } from 'pinia';
     import { ref, computed, onMounted } from 'vue';
     import AppTable from '@/components/ui/AppTable.vue';
-    import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+    import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon, XMarkIcon, PlusIcon } from '@heroicons/vue/24/solid';
     import ModalEditBoard from '@/components/Boards/ModalEditBoard.vue';
     import ModalRemoveUserFromBoard from '@/components/Boards/ModalRemoveUserFromBoard.vue';
     import AppBackButton from '@/components/ui/AppBackButton.vue';
     import ModalLeaveBoard from '@/components/Boards/ModalLeaveBoard.vue';
+    import ModalCreateCampaign from '@/components/Campaigns/ModalCreateCampaign.vue';
 
     const boardStore = useBoardStore();
     const modalsStore = useModalsStore();
@@ -59,12 +60,21 @@
 </script>
 
 <template>
-    <div class="relative flex items-center justify-evenly h-18">
+    <div class="relative flex items-center justify-evenly h-22">
         <AppBackButton route="/my-boards" />
 
         <h2 class="text-tavern-style">Mesa: {{ current_board?.name }}</h2>
 
         <div class="absolute right-4">
+            <button 
+                v-if="current_board?.is_logged_user_admin"
+                class="flex items-center btn-medieval" 
+                @click="modalsStore.openModal('create-campaign')"
+            >
+                <PlusIcon class="w-5 mr-1"/> 
+                <span>Cadastrar Campanha</span>
+            </button>
+            
             <button 
                 v-if="current_board?.is_logged_user_admin"
                 class="flex items-center btn-medieval" 
@@ -186,6 +196,13 @@
     <div class="p-8">
         <ModalLeaveBoard
             v-if="modalsStore.activeModal === 'leave-board'"
+            :board="current_board"
+            @close="modalsStore.closeModal"
+        />
+    </div>
+    <div class="p-8">
+        <ModalCreateCampaign
+            v-if="modalsStore.activeModal === 'create-campaign'"
             :board="current_board"
             @close="modalsStore.closeModal"
         />

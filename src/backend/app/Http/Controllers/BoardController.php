@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BoardStoreRequest;
+use App\Http\Requests\StoreBoardRequest;
 use App\Models\Board;
 use App\Models\User;
 use App\Services\BoardService;
@@ -21,7 +21,7 @@ class BoardController extends Controller
         //
     }
 
-    public function store(BoardStoreRequest $request)
+    public function store(StoreBoardRequest $request)
     {
         $board = $this->service->create($request->validated());
 
@@ -35,7 +35,7 @@ class BoardController extends Controller
         return response()->json($board_details, 200);
     }
 
-    public function update(BoardStoreRequest $request, string $id)
+    public function update(StoreBoardRequest $request, string $id)
     {
         $board = Board::findOrFail($id);
         

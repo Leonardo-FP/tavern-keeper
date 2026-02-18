@@ -22,6 +22,17 @@ class CampaignSeeder extends Seeder
             ['name' => 'Songs of Stone and Shadow', 'board_id' => '2', 'status_id' => '5', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
         ];
 
+        $campaign_user = [
+            ['campaign_id' => 1, 'user_id' => 1, 'role' => 'gm',     'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['campaign_id' => 1, 'user_id' => 2, 'role' => 'player', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['campaign_id' => 1, 'user_id' => 3, 'role' => 'player', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+
+            ['campaign_id' => 2, 'user_id' => 1, 'role' => 'gm',     'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['campaign_id' => 2, 'user_id' => 2, 'role' => 'player', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['campaign_id' => 2, 'user_id' => 3, 'role' => 'player', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+        ];
+
         DB::table('campaigns')->insert($campaign);
+        DB::table('campaign_user')->insert($campaign_user);
     }
 }

@@ -67,4 +67,11 @@ class User extends Authenticatable
                     ->withPivot('is_admin')
                     ->withTimestamps();
     }
+
+    public function campaigns()
+    {
+        return $this->belongsToMany(Campaign::class)
+                    ->withPivot('role')
+                    ->withTimestamps();
+    }
 }

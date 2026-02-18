@@ -8,6 +8,13 @@ use App\Models\Campaign;
 
 class CampaignController extends Controller
 {
+    protected CampaignService $service;
+
+    public function __construct(CampaignService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
         //
@@ -15,7 +22,9 @@ class CampaignController extends Controller
 
     public function store(StoreCampaignRequest $request)
     {
-        //
+        $campaign = $this->service->create($request->validated());
+
+        return response()->json($campaign, 201);
     }
 
     public function show(Campaign $campaign)

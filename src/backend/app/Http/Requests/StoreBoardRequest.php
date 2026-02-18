@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BoardStoreRequest extends FormRequest
+class StoreBoardRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -26,6 +26,7 @@ class BoardStoreRequest extends FormRequest
     {
         return [
             'name.required' => 'O Nome da Mesa é obrigatório.',
+            'name.max' => 'O Nome da Mesa não pode ultrapassar 100 caracteres.',
             'users_limit.required' => 'O Limite de Jogadores deve ser informado.',
             'users_limit.min' => 'A mesa precisa ter pelo menos 1 jogador!',
         ];

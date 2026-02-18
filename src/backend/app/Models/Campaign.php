@@ -16,6 +16,10 @@ class Campaign extends Model
         'status_id',
     ];
 
+    protected $casts = [
+        'role' => CampaignRole::class,
+    ];
+
     public function board(): BelongsTo
     {
         return $this->belongsTo(Board::class);
@@ -24,5 +28,12 @@ class Campaign extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function users(): HasMany
+    {
+        return $this->belongsToMany(User::class)
+            ->withPivot('role')
+            ->withTimestamps();
     }
 }
