@@ -1,5 +1,5 @@
 <template>
-  <AppCard :link="link">
+  <AppCard :link="link" :target="target">
     <img class="size-12 shrink-0" :src="iconSrc" :alt="iconAlt" />
     <div>
       <div class="text-xl text-left font-bold">{{ title }}</div>
@@ -15,6 +15,10 @@ defineProps({
   content: String,
   iconSrc: String,
   iconAlt: String,
-  link: String
+  link: String,
+  target: {
+    type: String,
+    required: false,
+  }
 });
 </script>

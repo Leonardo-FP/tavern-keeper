@@ -86,14 +86,14 @@ button {
   color: var(--color-rajah);
   letter-spacing: 0.04em;
   line-height: 0.85;
-  text-shadow: 4px 4px 0px black;
+  text-shadow: 4px 4px 0px var(--color-black);
 }
 
 /* Texto alternativo estilizado na temática de taverna */
 .text-tavern-style-alt {
   font-family: 'Draconis'; 
   font-weight: bold;
-  color: black;
+  color: var(--color-black);
   text-transform: uppercase;
   line-height: 0.8;
   letter-spacing: 0.02em;
@@ -102,7 +102,7 @@ button {
 
 /* Texto estilizado específico para o logo na NavBar */
 .text-tavern-logo {
-  color: black;
+  color: var(--color-black);
   text-transform: uppercase;
   display: flex;
   flex-direction: column;
@@ -123,14 +123,14 @@ button {
 .btn-medieval {
   font-weight: 600;
   background-color: var(--color-di-serria);
-  border: 2px solid black;
+  border: 2px solid var(--color-black);
   padding: 6px 12px;
   border-radius: 4px;
 }
 
 .btn-medieval:hover {
     background: var(--color-flamingo);
-    color: black;
+    color: var(--color-black);
 }
 
 /* Estilização básica dos status em listagens */
@@ -141,5 +141,33 @@ button {
   border-radius: 2px;
   color: rgb(0, 0, 0);
   border-radius: 15px;
-  border: 1px solid black;
+  border: 1px solid var(--color-black);
+}
+
+/* Estilização de áreas de conteúdo */
+.medieval-frame {
+    padding: 14px;
+    background: linear-gradient(
+        135deg,
+        #4a2e1f,
+        #6b422a,
+        #3b2418
+    );
+    border-radius: 10px;
+    box-shadow:
+        inset 0 0 0 3px #2b160d,
+        inset 0 0 0 6px #8a5a3a,
+        0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Miolo */
+.medieval-frame-content {
+    background-color: var(--color-santa-fe);
+
+    padding: 20px;
+    border-radius: 6px;
+
+    box-shadow:
+        inset 0 0 20px rgba(0, 0, 0, 0.08),
+        inset 0 0 4px rgba(0, 0, 0, 0.12);
 }

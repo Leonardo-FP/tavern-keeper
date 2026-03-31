@@ -44,7 +44,8 @@
             content="Clique para acessar o repositório do projeto no Github"
             iconSrc="/assets/icons/cards/github.png"
             iconAlt="Este é um card que permite aos jogadores acessarem o repositório do Github do projeto"
-            link="/about"
+            link="https://github.com/Leonardo-FP/tavern-keeper"
+            target="_blank"
         />
         <HomeCard 
             title="Sobre o projeto"
@@ -54,18 +55,11 @@
             link="/about"
         />
         <HomeCard 
-            title="Comunidade"
-            content="Clique para fazer parte da nossa comunidade no Discord"
-            iconSrc="/assets/icons/cards/discord.png"
-            iconAlt="Este é um card que permite aos jogadores entrarem na comunidade do Discord do projeto"
-            link="/about"
-        />
-        <HomeCard 
             title="Dúvidas frequentes"
             content="Clique para tirar as suas dúvidas"
             iconSrc="/assets/icons/cards/question.png"
             iconAlt="Este é um card que permite aos jogadores visualizarem as dúvidas frequentes"
-            link="/about"
+            link="/faqs"
         />
     </div>
     <div class="p-8">

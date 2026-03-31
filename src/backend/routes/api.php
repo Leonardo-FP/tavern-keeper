@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\FaqController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,8 @@ Route::middleware(['auth:sanctum'])->group(function() {
     ]);
     
     Route::get('my-boards', [BoardController::class, 'myBoards']);
+    
+    Route::get('faqs', [FaqController::class, 'index']);
 
     Route::delete('/boards/{board_id}/users/{user_id}', [BoardController::class, 'removeUser']);
     Route::delete('/boards/{board_id}/leave', [BoardController::class, 'leave']);
