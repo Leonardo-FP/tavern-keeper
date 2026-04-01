@@ -1,8 +1,13 @@
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import AppInput from '@/components/ui/AppInput.vue'
+
+const players = ref([])
+const gms = ref([])
+const showPlayerSelect = ref(false)
+const showGmSelect = ref(false)
 
 const props = defineProps({
   initialValues: {
@@ -56,11 +61,11 @@ const availableUsers = computed(() => {
  */
 const submit = handleSubmit(values => {
   const campaign_users = [
-    ...values.players.map(id => ({
+    ...players.value.map(id => ({
       user_id: id,
       role: 'player'
     })),
-    ...values.gms.map(id => ({
+    ...gms.value.map(id => ({
       user_id: id,
       role: 'gm'
     }))
@@ -78,6 +83,12 @@ defineExpose({
   isSubmitting
 })
 
+const usersMap = computed(() => {
+  return Object.fromEntries(
+    props.boardUsers.map(user => [user.id, user])
+  )
+})
+
 function addPlayer(userId) {
   players.value.push(userId)
   showPlayerSelect.value = false
@@ -85,6 +96,15 @@ function addPlayer(userId) {
 
 function removePlayer(userId) {
   players.value = players.value.filter(id => id !== userId)
+}
+
+function addGm(userId) {
+  gms.value.push(userId)
+  showGmSelect.value = false;
+}
+
+function removeGm(userId) {
+  gms.value = gms.value.filter(id => id !== userId)
 }
 </script>
 
@@ -98,40 +118,35 @@ function removePlayer(userId) {
             <h3>Jogadores</h3>
 
             <div v-for="id in players" :key="id" @click="removePlayer(id)">
-                {{ usersMap[id]?.name }}
+                {{ usersMap[id]?.nickname }}
             </div>
 
-            <button @click="showPlayerSelect = true">
-                + Adicionar usuário
-            </button>
+            <div class="text-center">
+              <select v-if="showPlayerSelect" @change="addPlayer(Number($event.target.value))">
+                  <option disabled selected value="">Selecione</option>
 
-            <select v-if="showPlayerSelect"
-                @change="addPlayer(Number($event.target.value))">
-                <option disabled selected value="">Selecione</option>
+                  <option
+                      v-for="user in availableUsers"
+                      :key="user.id"
+                      :value="user.id"
+                  >
+                      {{ user.nickname }}
+                  </option>
+              </select>
 
-                <option
-                    v-for="user in availableUsers"
-                    :key="user.id"
-                    :value="user.id"
-                >
-                    {{ user.name }}
-                </option>
-            </select>
+              <button class="btn-medieval" type="button" @click="showPlayerSelect = true">+ Adicionar usuário</button>
+            </div>
         </div>
 
         <div class="justify-items-center">
             <h3>Mestres</h3>
 
-            <div v-for="id in players" :key="id" @click="removePlayer(id)">
-                {{ usersMap[id]?.name }}
+            <div v-for="id in gms" :key="id" @click="removeGm(id)">
+                {{ usersMap[id]?.nickname }}
             </div>
 
-            <button @click="showPlayerSelect = true">
-                + Adicionar usuário
-            </button>
-
-            <select v-if="showPlayerSelect"
-                @change="addPlayer(Number($event.target.value))">
+            <div class="text-center">
+              <select class="text-center" v-if="showGmSelect" @change="addGm(Number($event.target.value))">
                 <option disabled selected value="">Selecione</option>
 
                 <option
@@ -139,9 +154,12 @@ function removePlayer(userId) {
                     :key="user.id"
                     :value="user.id"
                 >
-                    {{ user.name }}
+                    {{ user.nickname }}
                 </option>
-            </select>
+              </select>
+
+              <button class="btn-medieval" type="button" @click="showGmSelect = true">+ Adicionar usuário</button>
+            </div>
         </div>
     </div>
   </form>
