@@ -26,7 +26,7 @@ const layoutClass = computed(() => route.meta.layoutClass ?? '')
   </main>
 </template>
 
-<style>
+<style scoped>
   :root {
     --navbar-height: 96px;
   }
