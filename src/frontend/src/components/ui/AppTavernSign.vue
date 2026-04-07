@@ -4,7 +4,7 @@
       <div class="sign">
         <div class="sign-content">
           <h1 class="title">TAVERN KEEPER</h1>
-          <span class="subtitle">Toda aventura começa numa taverna</span>
+          <span class="subtitle">Toda aventura começa em uma taverna</span>
         </div>
         <span class="chain left"></span>
         <span class="chain right"></span>

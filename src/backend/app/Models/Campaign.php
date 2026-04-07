@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Enums\CampaignRole;
 
 class Campaign extends Model
 {
@@ -30,7 +31,7 @@ class Campaign extends Model
         return $this->belongsTo(Status::class);
     }
 
-    public function users(): HasMany
+    public function users()
     {
         return $this->belongsToMany(User::class)
             ->withPivot('role')

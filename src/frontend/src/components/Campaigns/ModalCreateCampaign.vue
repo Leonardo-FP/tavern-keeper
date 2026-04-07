@@ -2,11 +2,11 @@
 import Modal from '@/components/ui/Modal.vue';
 import { ref } from 'vue';
 import { useModalsStore } from '@/stores/modals';
-import { useCampaignStore } from '@/stores/campaignStore';
+import { useBoardStore } from '@/stores/boardStore';
 import { useToastStore } from '@/stores/toast';
 import CampaignForm from './CampaignForm.vue';
 
-const campaignStore = useCampaignStore();
+const boardStore = useBoardStore();
 const modalsStore = useModalsStore();
 const toastStore = useToastStore();
 
@@ -29,7 +29,8 @@ const onConfirm = () => {
 };
 
 const createCampaign = async (values) => {
-  await campaignStore.createCampaign(values);
+
+  await boardStore.createCampaign(values);
   
   toastStore.addToast({ 
     type: 'success', 

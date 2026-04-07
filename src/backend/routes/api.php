@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\FaqController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,10 @@ Route::middleware(['auth:sanctum'])->group(function() {
 
     Route::apiResources([
         'boards' => BoardController::class,
+    ]);
+
+    Route::apiResources([
+        'campaigns' => CampaignController::class,
     ]);
     
     Route::get('my-boards', [BoardController::class, 'myBoards']);

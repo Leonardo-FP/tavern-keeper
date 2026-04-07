@@ -88,6 +88,18 @@ export const useBoardStore = defineStore('boards', {
             } catch(error) {
                 throw error;
             }
-        }
+        },
+
+        async createCampaign(payload) {
+            try {
+                const response = await api.post('/campaigns', payload);
+                this.current_board.campaigns.push(response.data);
+
+            } catch(error) {
+                console.log(error.response?.data);
+                console.log(error.response?.status);
+                throw error;
+            }
+        },
     }
 })

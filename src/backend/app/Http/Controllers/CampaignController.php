@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCampaignRequest;
 use App\Http\Requests\UpdateCampaignRequest;
+use App\Services\CampaignService;
 use App\Models\Campaign;
 
 class CampaignController extends Controller
@@ -24,7 +25,7 @@ class CampaignController extends Controller
     {
         $campaign = $this->service->create($request->validated());
 
-        return response()->json($campaign, 201);
+        return response()->json($campaign->load('status'), 201);
     }
 
     public function show(Campaign $campaign)
