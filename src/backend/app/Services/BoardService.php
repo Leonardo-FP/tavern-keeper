@@ -47,7 +47,7 @@ class BoardService
 
     public function show($id)
     {
-        $board = Board::with(['campaigns.status', 'users'])->findOrFail($id);
+        $board = Board::with(['campaigns.users', 'campaigns.status', 'users'])->findOrFail($id);
 
         return new BoardResource($board);
     }
@@ -57,7 +57,7 @@ class BoardService
         return auth()
             ->user()
             ->boards()
-            ->withCount(['users as current_players'])
+            ->withCount(['campaigns as total_campaigns', 'users as current_players'])
             ->latest()
             ->paginate(6);
     }

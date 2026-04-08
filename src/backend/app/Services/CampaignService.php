@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\CampaignResource;
 use App\Models\Campaign;
 
 class CampaignService
@@ -19,6 +20,26 @@ class CampaignService
 
         // Adicionar o usuário criador como admin
         $campaign->users()->attach($users);
+
+        return $campaign;
+    }
+    
+    public function show($id)
+    {
+        $campaign = Campaign::findOrFail($id);
+
+        return new CampaignResource($campaign);
+    }
+
+    public function join($id)
+    {
+        $campaign = Campaign::findOrFail($id);
+
+        if (! $campaign->users()->where('user_id', auth()->id())->exists()) {
+            $campaign->users()->attach(auth()->id(), [
+                'role' => 'player'
+            ]);
+        }
 
         return $campaign;
     }

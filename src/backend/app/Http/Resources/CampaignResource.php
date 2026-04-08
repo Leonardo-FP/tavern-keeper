@@ -21,6 +21,15 @@ class CampaignResource extends JsonResource
                     'status_color' => $this->status->status_color,
                 ]
             ),
+
+            // Usuários da campanha
+            'users' => $this->when(
+                $this->relationLoaded('users'),
+                fn () => $this->users->map(fn ($user) => [
+                    'id'   => $user->id,
+                    'nickname' => $user->nickname,
+                ]),
+            ),
         ];
     }
 }

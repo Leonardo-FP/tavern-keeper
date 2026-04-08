@@ -1,6 +1,6 @@
 <script setup>
   import AppCard from '@/components/ui/AppCard.vue';
-  import { LockOpenIcon, LockClosedIcon, CalendarDaysIcon, UserGroupIcon, ShieldCheckIcon, FireIcon } from '@heroicons/vue/24/solid';
+  import { LockOpenIcon, LockClosedIcon, CalendarDaysIcon, UserGroupIcon, ShieldCheckIcon, FireIcon, BookOpenIcon } from '@heroicons/vue/24/solid';
 
   defineProps({ board: Object });
   defineEmits(['click']);
@@ -30,6 +30,11 @@
         <p class="flex">
           <UserGroupIcon class="w-5 mr-1" />
           <span>Jogadores: {{ board.current_players }} de no máximo {{ board.users_limit }}</span>
+        </p>
+
+        <p class="flex">
+          <BookOpenIcon class="w-5 mr-1" />
+          <span>Campanhas: {{ board.total_campaigns }} cadastradas</span>
         </p>
 
         <p v-if="board.pivot.is_admin" class="flex">

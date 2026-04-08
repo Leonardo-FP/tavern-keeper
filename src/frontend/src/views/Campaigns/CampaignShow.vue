@@ -1,84 +1,12 @@
 <script setup>
-    import { useBoardStore } from '@/stores/boardStore'
-    import { useModalsStore } from '@/stores/modals';
-    import { useAuthStore } from '@/stores/auth';
-    import { onBeforeRouteLeave, useRoute } from 'vue-router'
-    import router from '@/router';
-    import { storeToRefs } from 'pinia';
-    import { ref, computed, onMounted } from 'vue';
-    import AppTable from '@/components/ui/AppTable.vue';
-    import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon, XMarkIcon, PlusIcon } from '@heroicons/vue/24/solid';
-    import ModalEditBoard from '@/components/Boards/ModalEditBoard.vue';
-    import ModalRemoveUserFromBoard from '@/components/Boards/ModalRemoveUserFromBoard.vue';
     import AppBackButton from '@/components/ui/AppBackButton.vue';
-    import ModalLeaveBoard from '@/components/Boards/ModalLeaveBoard.vue';
-    import ModalCreateCampaign from '@/components/Campaigns/ModalCreateCampaign.vue';
-    import AppTavernFrame from '@/components/ui/AppTavernFrame.vue';
-    import ModalEnterCampaign from '@/components/Campaigns/ModalEnterCampaign.vue';
+    import { useCampaignStore } from '@/stores/campaignStore'
 
-    const boardStore = useBoardStore();
-    const modalsStore = useModalsStore();
-    const route = useRoute();
-    const authStore = useAuthStore();
+    const campaignStore = useCampaignStore();
 
     onMounted(() => {
-        // Carrega as informações da mesa na boardStore
-        boardStore.showBoard(Number(route.params.id));
-    });
-
-    // Armazena o valor da mesa atual em uma constante para facilitar o acesso
-    const { current_board } = storeToRefs(boardStore);
-    
-    // Armazena o valor do usuário que está selecionado
-    const selectedUser = ref(null);
-    // Armazena o valor da campanha que está selecionada
-    const selectedCampaign = ref(null);
-
-    // Verifica se existem campanhas nessa mesa
-    const hasCampaigns = computed(() => {
-        return current_board.value?.campaigns?.length > 0;
-    });
-
-    // Verifica se o usuário logado pode remover os outros da mesa
-    const canRemoveUser = (user) => {
-        return (
-            current_board.value?.is_logged_user_admin &&
-            authStore.user &&
-            user.id !== authStore.user.id
-        );
-    };
-
-    // Função para verificar se o usuário já participa da campanha
-    const enterCampaign = (campaign) => {
-        return campaign.users?.some(
-            user => user.id === authStore.user?.id
-        );
-    };
-
-    // Função para abrir modal de deletar usuário
-    const openRemoveUserModal = (user) => {
-        selectedUser.value = user;
-        modalsStore.openModal('remove-user-board');
-    }
-
-    // Função para abrir modal de entrar na campanha
-    const openEnterCampaignModal = (campaign) => {
-        selectedCampaign.value = campaign;
-        modalsStore.openModal('enter-campaign');
-    }
-
-    // Função para abrir a tela de visualização da campanha
-    const openCampaign = (id) => {
-        router.push(`/campaigns/${id}`);
-    }
-
-    onBeforeRouteLeave((to, from, next) => {
-        // se o destino NÃO for uma rota de board
-        if (!to.path.startsWith('/boards')) {
-            boardStore.clearCurrentBoard()
-        }
-
-        next()
+        // Carrega as informações da campanha na campaignStore
+        campaignStore.showCampaign(Number(route.params.id));
     });
 </script>
 

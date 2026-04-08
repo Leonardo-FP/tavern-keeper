@@ -28,9 +28,11 @@ class CampaignController extends Controller
         return response()->json($campaign->load('status'), 201);
     }
 
-    public function show(Campaign $campaign)
+    public function show(string $id)
     {
-        //
+        $campaign_details = $this->service->show($id);
+
+        return response()->json($campaign_details, 200);
     }
 
     public function update(UpdateCampaignRequest $request, Campaign $campaign)
@@ -41,5 +43,11 @@ class CampaignController extends Controller
     public function destroy(Campaign $campaign)
     {
         //
+    }
+
+    public function join(int $campaign_id){
+        $campaign = $this->service->join($campaign_id);
+
+        return response()->json($campaign, 200);
     }
 }

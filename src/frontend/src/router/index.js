@@ -4,6 +4,7 @@ import AboutView from '../views/AboutView.vue'
 import FaqView from '../views/FaqView.vue'
 import MyBoards from '../views/Boards/MyBoards.vue'
 import BoardShow from '../views/Boards/BoardShow.vue'
+import CampaignShow from '../views/Campaigns/CampaignShow.vue'
 import NotFound from '../views/NotFound.vue'
 import LoginPage from '../views/Auth/LoginPage.vue'
 import RegisterPage from '../views/Auth/RegisterPage.vue'
@@ -53,6 +54,15 @@ const router = createRouter({
       path: '/boards/:id',
       name: 'board-show',
       component: BoardShow,
+      meta: { 
+        requiresAuth: true,
+        layoutClass: 'board-background'
+      }
+    },
+    {
+      path: '/campaigns/:id',
+      name: 'campaign-show',
+      component: CampaignShow,
       meta: { 
         requiresAuth: true,
         layoutClass: 'board-background'

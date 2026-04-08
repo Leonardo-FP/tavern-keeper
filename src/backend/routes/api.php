@@ -24,6 +24,8 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::apiResources([
         'campaigns' => CampaignController::class,
     ]);
+
+    Route::post('/campaigns/{campaign}/join', [CampaignController::class, 'join']);
     
     Route::get('my-boards', [BoardController::class, 'myBoards']);
     

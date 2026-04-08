@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import api from '@/services/api';
+import router from '@/router';
 
 export const useBoardStore = defineStore('boards', {
     state: () => ({
@@ -96,8 +97,18 @@ export const useBoardStore = defineStore('boards', {
                 this.current_board.campaigns.push(response.data);
 
             } catch(error) {
-                console.log(error.response?.data);
-                console.log(error.response?.status);
+                throw error;
+            }
+        },
+
+        async joinCampaign(campaignId) {
+            try {
+               
+                const response = await api.post(`/campaigns/${campaignId}/join`);
+
+                router.push(`/campaigns/${campaignId}`);
+
+            } catch(error) {
                 throw error;
             }
         },

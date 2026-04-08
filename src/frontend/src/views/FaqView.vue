@@ -3,6 +3,7 @@
     import { onMounted, ref } from 'vue';
     import { useFaqStore } from '@/stores/faqStore';
     import AppBackButton from '@/components/ui/AppBackButton.vue';
+    import AppTavernFrame from '@/components/ui/AppTavernFrame.vue';
 
     const faqStore = useFaqStore();
     const loading = ref(true);
@@ -27,14 +28,12 @@
         <h2 class="text-tavern-style text-center">Dúvidas Frequentes</h2>
     </div>
     <div class="p-4">
-        <div v-if="!loading">
-            <div class="medieval-frame max-w-4xl mx-auto">
-                <div class="medieval-frame-content">
-                    <AppAccordion 
-                        v-for="faq in faqStore.faqs" :key="faq.id" :faq="faq" 
-                    />
-                </div>
-            </div>
+        <div v-if="!loading" class="max-w-4xl mx-auto">
+            <AppTavernFrame>
+                <AppAccordion 
+                    v-for="faq in faqStore.faqs" :key="faq.id" :faq="faq" 
+                />
+            </AppTavernFrame>
         </div>
 
         <div class="mt-10 flex justify-center items-center gap-4">

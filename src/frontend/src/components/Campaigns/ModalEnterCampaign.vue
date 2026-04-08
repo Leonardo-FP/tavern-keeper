@@ -9,7 +9,7 @@ const toastStore = useToastStore();
 const boardStore = useBoardStore();
 
 const props = defineProps({
-  user: {
+  campaign: {
     type: Object,
     required: true
   },
@@ -21,14 +21,13 @@ const props = defineProps({
 
 const onConfirm = async () => {
     try {
-        const user_id = props.user.id;
-        const board_id = props.board.id;
+        const campaign_id = props.campaign.id;
 
-        await boardStore.removeUserFromBoard(user_id, board_id);
+        await boardStore.joinCampaign(campaign_id);
         
         toastStore.addToast({ 
             type: 'success', 
-            message: 'Usuário removido da mesa com sucesso!' 
+            message: 'Você começou a participar da campanha!' 
         });
         
         modalsStore.closeModal(); 
@@ -38,7 +37,7 @@ const onConfirm = async () => {
         if(error.response?.status === 403) {
           toastStore.addToast({
               type: 'error', 
-              message: 'Você não tem permissão para editar esta mesa.'
+              message: 'Erro ao entrar na campanha.'
           });
         }
 
@@ -50,11 +49,11 @@ const onConfirm = async () => {
 
 <template>
   <Modal
-    :isVisible="modalsStore.activeModal === 'remove-user-board'"
-    title="Remover usuário da mesa"
+    :isVisible="modalsStore.activeModal === 'enter-campaign'"
+    title="Entrar na campanha"
     @close="modalsStore.closeModal()"
     @confirm="onConfirm"
   >
-    <p class="text-xl">Você tem certeza que deseja remover o jogador <span class="text-tavern-style-alt">{{ user?.nickname }}</span> da mesa <span class="text-tavern-style-alt">{{ board?.name }}</span>?</p>
+    <p class="text-xl">Você tem certeza que deseja participar da campanha <span class="text-tavern-style-alt">{{ campaign?.name }}</span> da mesa <span class="text-tavern-style-alt">{{ board?.name }}</span>?</p>
   </Modal>
 </template>

@@ -58,8 +58,9 @@ onBeforeUnmount(() => {
             @click="toggleNav"
           >
             <img
+              v-if="authStore.user"
               class="rounded-full bg-black shadow-xl/30 border p-1 w-16 h-16 object-cover"
-              :src="authStore?.user?.icon?.path ?? '/assets/icons/avatars/dragon.png'"
+              :src="authStore?.user?.icon?.path || '/assets/icons/avatars/dragon.png'"
               alt="Ícone do usuário"
             />
 
@@ -103,7 +104,7 @@ onBeforeUnmount(() => {
 
             <template v-else>
               <li>
-                <RouterLink @click="closeNav" to="/" class="block px-4 py-2 border-b-1 hover:bg-di-serria">
+                <RouterLink @click="closeNav" to="/my-boards" class="block px-4 py-2 border-b-1 hover:bg-di-serria">
                   Minhas Mesas
                 </RouterLink>
               </li>
