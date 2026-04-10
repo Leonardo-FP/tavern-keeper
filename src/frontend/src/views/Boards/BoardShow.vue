@@ -176,7 +176,7 @@
         </div>
 
         <div class="col-span-5">
-            <h3 class="text-tavern-style text-center mb-4">Lista de Membros</h3>
+            <h3 class="text-tavern-style text-center mb-4">Membros da Mesa</h3>
             
             <AppTavernFrame>
                 <AppTable>

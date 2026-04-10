@@ -50,4 +50,14 @@ class CampaignController extends Controller
 
         return response()->json($campaign, 200);
     }
+
+    public function leave(int $campaign_id)
+    {
+        $campaign = Campaign::findOrFail($campaign_id);
+        $user = auth()->user();
+
+        $this->service->leave($campaign, $user);
+
+        return response()->noContent();
+    }
 }

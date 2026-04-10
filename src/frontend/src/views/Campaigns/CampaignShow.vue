@@ -1,126 +1,109 @@
 <script setup>
     import AppBackButton from '@/components/ui/AppBackButton.vue';
-    import { useCampaignStore } from '@/stores/campaignStore'
+    import AppTavernFrame from '@/components/ui/AppTavernFrame.vue';
+    import { useCampaignStore } from '@/stores/campaignStore';
+    import { useModalsStore } from '@/stores/modals';
+    import { useRoute } from 'vue-router';
+    import { storeToRefs } from 'pinia';
+    import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+    import { computed, onMounted } from 'vue';
+    import AppTable from '@/components/ui/AppTable.vue';
+    import ModalEditCampaign from '@/components/Campaigns/ModalEditCampaign.vue';
+    import ModalLeaveCampaign from '@/components/Campaigns/ModalLeaveCampaign.vue';
 
     const campaignStore = useCampaignStore();
+    const modalsStore = useModalsStore();
+    const route = useRoute();
 
     onMounted(() => {
         // Carrega as informações da campanha na campaignStore
         campaignStore.showCampaign(Number(route.params.id));
     });
+
+    const gmUsers = computed(() => {
+        return (current_campaign.value?.users || [])
+            .filter(user => user?.role === 'gm');
+    });
+
+    const players = computed(() => {
+        return (current_campaign.value?.users || [])
+            .filter(user => user?.role === 'player');
+    });
+
+    // Armazena o valor da campanha atual em uma constante para facilitar o acesso
+    const { current_campaign } = storeToRefs(campaignStore);
 </script>
 
 <template>
     <div class="relative flex items-center justify-evenly h-22">
-        <AppBackButton route="/my-boards" />
+        <AppBackButton :route="`/boards/${current_campaign?.board_id}`" />
 
-        <h2 class="text-tavern-style">Mesa: {{ current_board?.name }}</h2>
+        <h2 class="text-tavern-style">Campanha: {{ current_campaign?.name }}</h2>
 
         <div class="absolute right-4">
+       
             <button 
-                v-if="current_board?.is_logged_user_admin"
-                class="flex items-center btn-medieval" 
-                @click="modalsStore.openModal('create-campaign')"
-            >
-                <PlusIcon class="w-5 mr-1"/> 
-                <span>Cadastrar Campanha</span>
-            </button>
-            
-            <button 
-                v-if="current_board?.is_logged_user_admin"
-                class="flex items-center btn-medieval" 
-                @click="modalsStore.openModal('edit-board')"
+                class="flex items-center btn-medieval"
+                @click="modalsStore.openModal('edit-campaign')"
             >
                 <Cog6ToothIcon class="w-5 mr-1"/> 
-                <span>Configurações da Mesa</span>
+                <span>Configurações da Campanha</span>
             </button>
 
             <button 
-                class="flex items-center btn-medieval" 
-                @click="modalsStore.openModal('leave-board')"
+                class="flex items-center btn-medieval"
+                @click="modalsStore.openModal('leave-campaign')"
             >
                 <ArrowRightStartOnRectangleIcon class="w-5 mr-1"/> 
-                <span>Sair da Mesa</span>
+                <span>Sair da Campanha</span>
             </button>
         </div>
         
     </div>
     <div class="grid grid-cols-12 gap-10 mt-14">
         <div class="col-span-7">
-            <h3 class="text-tavern-style text-center mb-4">Lista de Campanhas</h3>
+            <h3 class="text-tavern-style text-center mb-4">Linha do Tempo</h3>
 
             <AppTavernFrame>
-                <AppTable>
-                    <template #body>
-                        <tr v-if="!hasCampaigns">
-                            <td
-                                colspan="3"
-                                class="text-center text-tavern-style-alt text-xl"
-                            >
-                                Nenhuma campanha encontrada
-                            </td>
-                        </tr>
-
-                        <tr
-                            v-else
-                            v-for="campaign in current_board.campaigns"
-                            :key="campaign.id"
-                            class="text-xl"
-                        >
-                            <td class="text-tavern-style-alt">
-                                {{ campaign.name }}
-                            </td>
-
-                            <td class="text-center">
-                                <span
-                                    class="status"
-                                    :style="{ backgroundColor: campaign.status?.status_color ?? '#8C7A6B' }"
-                                >
-                                    {{ campaign.status?.name ?? '-' }}
-                                </span>
-                            </td>
-
-                            <td >
-                                <button 
-                                    v-if="enterCampaign(campaign)"
-                                    class="btn-medieval text-sm" 
-                                    @click="openCampaign(campaign.id)"
-                                >
-                                    Abrir
-                                </button>
-                        
-                                <button 
-                                    v-else
-                                    class="btn-medieval text-sm" 
-                                    @click="openEnterCampaignModal(campaign)"
-                                >
-                                    Participar 
-                                </button>
-                            </td>
-                        </tr>
-                    </template>
-                </AppTable>
+                <h2>oi</h2>
             </AppTavernFrame>
         </div>
 
         <div class="col-span-5">
-            <h3 class="text-tavern-style text-center mb-4">Lista de Membros</h3>
+            <h3 class="text-tavern-style text-center mb-4">Mestres</h3>
             
             <AppTavernFrame>
                 <AppTable>
                     <template #body>
-                        <tr v-for="user in current_board?.users" 
+                        <tr v-for="user in gmUsers" 
                             :key="user.id"
                             class="text-xl"
                         >
                             <td class="text-tavern-style-alt">• {{ user.nickname }}</td>
 
                             <td>
-                                <button 
-                                    v-if="canRemoveUser(user)"
-                                    class="btn-medieval" 
-                                    @click="openRemoveUserModal(user)"
-                                >
+                                <button class="btn-medieval">
+                                    <XMarkIcon class="w-5 mr-1" />
+                                </button>
+                            </td>
+                        </tr>
+                    </template>
+                </AppTable>
+            </AppTavernFrame>
+
+            <h3 class="text-tavern-style text-center mb-4 mt-4">Jogadores</h3>
+            
+            <AppTavernFrame>
+                <AppTable>
+                    <template #body>
+                        <tr v-for="user in players"
+                            :key="user.id"
+                            class="text-xl"
+                        >
+                            <td class="text-tavern-style-alt">• {{ user.nickname }}</td>
+
+                            <td>
+                                <button class="btn-medieval">
                                     <XMarkIcon class="w-5 mr-1" />
                                 </button>
                             </td>
@@ -137,39 +120,15 @@
         </div>
     </div>
     <div class="p-8">
-        <ModalEditBoard
-            v-if="current_board"
-            :initialValues="current_board"
+        <ModalEditCampaign
+            v-if="current_campaign && modalsStore.activeModal === 'edit-campaign'"
+            :initialValues="current_campaign"
         />
     </div>
-    <div class="p-8">
-        <ModalRemoveUserFromBoard
-            v-if="modalsStore.activeModal === 'remove-user-board'"
-            :user="selectedUser"
-            :board="current_board"
-            @close="modalsStore.closeModal"
-        />
-    </div>
-    <div class="p-8">
-        <ModalLeaveBoard
-            v-if="modalsStore.activeModal === 'leave-board'"
-            :board="current_board"
-            @close="modalsStore.closeModal"
-        />
-    </div>
-    <div class="p-8">
-        <ModalCreateCampaign
-            v-if="modalsStore.activeModal === 'create-campaign'"
-            :board="current_board"
-            @close="modalsStore.closeModal"
-        />
-    </div>
-    <div class="p-8">
-        <ModalEnterCampaign
-            v-if="modalsStore.activeModal === 'enter-campaign'"
-            :user="authStore.user"
-            :campaign="selectedCampaign"
-            :board="current_board"
+        <div class="p-8">
+        <ModalLeaveCampaign
+            v-if="modalsStore.activeModal === 'leave-campaign'"
+            :campaign="current_campaign"
             @close="modalsStore.closeModal"
         />
     </div>

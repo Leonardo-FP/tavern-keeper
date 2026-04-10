@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Resources\CampaignResource;
 use App\Models\Campaign;
+use App\Models\User;
 
 class CampaignService
 {
@@ -26,7 +27,7 @@ class CampaignService
     
     public function show($id)
     {
-        $campaign = Campaign::findOrFail($id);
+        $campaign = Campaign::with(['users'])->findOrFail($id);
 
         return new CampaignResource($campaign);
     }
@@ -42,5 +43,24 @@ class CampaignService
         }
 
         return $campaign;
+    }
+    
+    public function leave(Campaign $campaign, User $user)
+    {
+        if (!$campaign->users()->where('user_id', $user->id)->exists()) {
+            throw new \Exception('Você não pertence à campanha para deixá-la.');
+        }
+
+        $membersCount = $campaign->users()->count();
+
+        if ($membersCount === 1) {
+            $campaign->users()->detach($user->id);
+            $campaign->delete();
+            return true;
+        }
+
+        $campaign->users()->detach($user->id);
+
+        return true;
     }
 }

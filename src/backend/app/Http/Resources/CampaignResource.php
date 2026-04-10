@@ -11,6 +11,7 @@ class CampaignResource extends JsonResource
         return [
             'id'   => $this->id,
             'name' => $this->name,
+            'board_id' => $this->board_id,
 
             // Status da campanha
             'status' => $this->when(
@@ -28,6 +29,7 @@ class CampaignResource extends JsonResource
                 fn () => $this->users->map(fn ($user) => [
                     'id'   => $user->id,
                     'nickname' => $user->nickname,
+                    'role' => $user->pivot->role ?? null
                 ]),
             ),
         ];

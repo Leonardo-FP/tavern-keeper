@@ -2,15 +2,15 @@
 import Modal from '@/components/ui/Modal.vue';
 import { useModalsStore } from '@/stores/modals';
 import { useToastStore } from '@/stores/toast';
-import { useBoardStore } from '@/stores/boardStore';
+import { useCampaignStore } from '@/stores/campaignStore';
 import router from '@/router';
 
 const modalsStore = useModalsStore();
 const toastStore = useToastStore();
-const boardStore = useBoardStore();
+const campaignStore = useCampaignStore();
 
 const props = defineProps({
-  board: {
+  campaign: {
     type: Object,
     required: true
   }
@@ -18,15 +18,16 @@ const props = defineProps({
 
 const onConfirm = async () => {
     try {
-        const board_id = props.board.id;
+        const campaign_id = props.campaign.id;
 
-        await boardStore.leaveBoard(board_id);
+        console.log(campaign_id);
+        await campaignStore.leaveCampaign(campaign_id);
 
-        boardStore.clearCurrentBoard(); 
+        campaignStore.clearCurrentCampaign(); 
         
         toastStore.addToast({ 
             type: 'success', 
-            message: 'Você saiu da mesa!' 
+            message: 'Você saiu da campanha!' 
         });
         
         modalsStore.closeModal(); 
@@ -42,11 +43,11 @@ const onConfirm = async () => {
 
 <template>
   <Modal
-    :isVisible="modalsStore.activeModal === 'leave-board'"
-    title="Sair da mesa"
+    :isVisible="modalsStore.activeModal === 'leave-campaign'"
+    title="Sair da campanha"
     @close="modalsStore.closeModal()"
     @confirm="onConfirm"
   >
-    <p class="text-xl">Você tem certeza que deseja sair da mesa <span class="text-tavern-style-alt">{{ board?.name }}</span>?</p>
+    <p class="text-xl">Você tem certeza que deseja sair da campanha <span class="text-tavern-style-alt">{{ campaign?.name }}</span>?</p>
   </Modal>
 </template>
