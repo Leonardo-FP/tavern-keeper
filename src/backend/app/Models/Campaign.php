@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Enums\CampaignRole;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Campaign extends Model
 {
@@ -38,5 +39,18 @@ class Campaign extends Model
         return $this->belongsToMany(User::class)
             ->withPivot('role')
             ->withTimestamps();
+    }
+
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(CampaignSession::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:d/m/Y H:i',
+            'updated_at' => 'datetime:d/m/Y',
+        ];
     }
 }

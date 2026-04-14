@@ -10,6 +10,7 @@ import LoginPage from '../views/Auth/LoginPage.vue'
 import RegisterPage from '../views/Auth/RegisterPage.vue'
 
 import { useAuthStore } from '@/stores/auth'; 
+import MyCampaigns from '@/views/Campaigns/MyCampaigns.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,6 +55,15 @@ const router = createRouter({
       path: '/boards/:id',
       name: 'board-show',
       component: BoardShow,
+      meta: { 
+        requiresAuth: true,
+        layoutClass: 'board-background'
+      }
+    },
+    {
+      path: '/my-campaigns',
+      name: 'my-campaigns',
+      component: MyCampaigns,
       meta: { 
         requiresAuth: true,
         layoutClass: 'board-background'

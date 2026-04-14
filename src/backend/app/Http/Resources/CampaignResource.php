@@ -32,6 +32,16 @@ class CampaignResource extends JsonResource
                     'role' => $user->pivot->role ?? null
                 ]),
             ),
+
+            // Sessões da campanha
+            'sessions' => $this->when(
+                $this->relationLoaded('sessions'),
+                fn () => $this->sessions->map(fn ($session) => [
+                    'id'   => $session->id,
+                    'title' => $session->title,
+                    'description' => $session->description
+                ]),
+            ),
         ];
     }
 }

@@ -32,13 +32,18 @@
 
     // Armazena o valor da campanha atual em uma constante para facilitar o acesso
     const { current_campaign } = storeToRefs(campaignStore);
+
 </script>
 
 <template>
+    <div class="text-center">
+        <h2 class="text-tavern-style mb-4">Campanha: {{ current_campaign?.name }}</h2>
+    </div>
     <div class="relative flex items-center justify-evenly h-22">
-        <AppBackButton :route="`/boards/${current_campaign?.board_id}`" />
-
-        <h2 class="text-tavern-style">Campanha: {{ current_campaign?.name }}</h2>
+        <AppBackButton 
+            :route="`/boards/${current_campaign?.board_id}`" 
+            text="Voltar para a mesa" 
+        />
 
         <div class="absolute right-4">
        
@@ -58,14 +63,39 @@
                 <span>Sair da Campanha</span>
             </button>
         </div>
-        
     </div>
+  
     <div class="grid grid-cols-12 gap-10 mt-14">
         <div class="col-span-7">
-            <h3 class="text-tavern-style text-center mb-4">Linha do Tempo</h3>
+            <h3 class="text-tavern-style text-center mb-4">Sessões</h3>
 
             <AppTavernFrame>
-                <h2>oi</h2>
+                <AppTable>
+                    <template #body>
+                         <tr v-if="!current_campaign?.sessions?.length">
+                            <td 
+                                colspan="2" 
+                                class="text-center text-tavern-style-alt text-xl">
+                                Nenhuma sessão registrada ainda
+                            </td>
+                        </tr>
+
+                        <tr 
+                            v-else
+                            v-for="session in current_campaign?.sessions" 
+                            :key="session.id"
+                            class="text-xl"
+                        >
+                            <td class="text-tavern-style-alt">
+                                • {{ session.title }}
+                            </td>
+
+                            <td>
+                                <button class="btn-medieval text-sm">Abrir</button>
+                            </td>
+                        </tr>
+                    </template>
+                </AppTable>
             </AppTavernFrame>
         </div>
 

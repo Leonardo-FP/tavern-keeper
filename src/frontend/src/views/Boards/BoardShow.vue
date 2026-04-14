@@ -83,10 +83,14 @@
 </script>
 
 <template>
-    <div class="relative flex items-center justify-evenly h-22">
-        <AppBackButton route="/my-boards" />
-
+    <div class="text-center">
         <h2 class="text-tavern-style">Mesa: {{ current_board?.name }}</h2>
+    </div>
+    <div class="relative flex items-center justify-evenly h-22">
+        <AppBackButton 
+            route="/my-boards" 
+            text="Voltar para Minhas Mesas"    
+        />
 
         <div class="absolute right-4">
             <button 
@@ -115,7 +119,6 @@
                 <span>Sair da Mesa</span>
             </button>
         </div>
-        
     </div>
     <div class="grid grid-cols-12 gap-10 mt-14">
         <div class="col-span-7">
@@ -152,7 +155,7 @@
                                 </span>
                             </td>
 
-                            <td >
+                            <td>
                                 <button 
                                     v-if="enterCampaign(campaign)"
                                     class="btn-medieval text-sm" 

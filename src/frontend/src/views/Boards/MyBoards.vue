@@ -4,8 +4,12 @@ import { onMounted, ref } from 'vue';
 import { useBoardStore } from '@/stores/boardStore';
 import router from '@/router';
 import AppBackButton from '@/components/ui/AppBackButton.vue';
+import { PlusIcon } from '@heroicons/vue/24/solid';
+import ModalCreateBoard from '@/components/Boards/ModalCreateBoard.vue';
+import { useModalsStore } from '@/stores/modals';
 
 const boardStore = useBoardStore();
+const modalsStore = useModalsStore();
 const loading = ref(true);
 
 const loadPage = async (page) => {
@@ -24,13 +28,23 @@ onMounted(() => loadPage(1));
 </script>
 
 <template>
-  <div class="relative flex items-center justify-center h-12">
+  <div class="relative flex items-center justify-evenly h-22">
   
     <!-- Botão à esquerda -->
     <AppBackButton route="/" />
 
     <!-- Título centralizado -->
     <h2 class="text-tavern-style text-center">Minhas mesas</h2>
+
+    <div class="absolute right-4">
+        <button 
+            class="flex items-center btn-medieval" 
+            @click="modalsStore.openModal('create-board')"
+        >
+            <PlusIcon class="w-5 mr-1"/> 
+            <span>Criar Nova Mesa</span>
+        </button>
+    </div>
   </div>
   <div class="p-4">
     <div v-if="!loading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -61,5 +75,8 @@ onMounted(() => loadPage(1));
         Próxima
       </button>
     </div>
+  </div>
+  <div class="p-8">
+      <ModalCreateBoard />
   </div>
 </template>

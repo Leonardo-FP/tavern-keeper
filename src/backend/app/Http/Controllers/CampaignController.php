@@ -45,6 +45,13 @@ class CampaignController extends Controller
         //
     }
 
+    public function myCampaigns()
+    {
+        $campaigns = $this->service->getMyCampaigns();
+
+        return response()->json($campaigns, 200);
+    }
+
     public function join(int $campaign_id){
         $campaign = $this->service->join($campaign_id);
 

@@ -1,7 +1,7 @@
 <script setup>
 import Modal from '@/components/ui/Modal.vue';
 import BoardForm from './BoardForm.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useModalsStore } from '@/stores/modals';
 import { useToastStore } from '@/stores/toast';
 import { useBoardStore } from '@/stores/boardStore';
@@ -19,6 +19,8 @@ const emptyBoard = {
   users_limit: 10
 };
 
+const isSubmitting = computed(() => boardFormRef.value?.isSubmitting);
+
 const onConfirm = () => {
   boardFormRef.value.submit();
 };
@@ -33,13 +35,14 @@ const createBoard = async (values) => {
   
   modalsStore.closeModal();
 };
+
 </script>
 
 <template>
   <Modal
     :isVisible="modalsStore.activeModal === 'create-board'"
     title="Criar Mesa de Jogo"
-    :loading="boardFormRef?.isSubmitting"
+    :loading="isSubmitting"
     @close="modalsStore.closeModal()"
     @confirm="onConfirm"
   >

@@ -5,6 +5,11 @@ defineProps({
   route: {
     type: String,
     required: true
+  },
+  text: {
+    type: String, 
+    required: false,
+    default: 'Voltar'
   }
 });
 </script>
@@ -15,6 +20,6 @@ defineProps({
         class="absolute left-4 flex items-center btn-medieval"
     >
     <ArrowUturnLeftIcon class="w-5 mr-1" />
-    Voltar
+      {{ text }}
     </RouterLink>
 </template>

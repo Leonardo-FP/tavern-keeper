@@ -27,9 +27,19 @@ class CampaignService
     
     public function show($id)
     {
-        $campaign = Campaign::with(['users'])->findOrFail($id);
+        $campaign = Campaign::with(['users', 'status', 'sessions'])->findOrFail($id);
 
         return new CampaignResource($campaign);
+    }
+
+    public function getMyCampaigns()
+    {
+        return auth()
+            ->user()
+            ->campaigns()
+            ->withCount(['sessions as total_sessions', 'users as current_players'])
+            ->latest()
+            ->paginate(6);
     }
 
     public function join($id)

@@ -63,6 +63,6 @@
         />
     </div>
     <div class="p-8">
-        <ModalCreateBoard />
+        <ModalCreateBoard @created="() => loadPage(1)" />
     </div>
 </template>

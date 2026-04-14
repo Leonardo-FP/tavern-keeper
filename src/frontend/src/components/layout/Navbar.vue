@@ -109,7 +109,7 @@ onBeforeUnmount(() => {
                 </RouterLink>
               </li>
               <li>
-                <RouterLink @click="closeNav" to="/" class="block px-4 py-2 border-b-1 hover:bg-di-serria">
+                <RouterLink @click="closeNav" to="/my-campaigns" class="block px-4 py-2 border-b-1 hover:bg-di-serria">
                   Minhas Campanhas
                 </RouterLink>
               </li>

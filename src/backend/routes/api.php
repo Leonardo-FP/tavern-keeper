@@ -29,6 +29,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
         'campaigns' => CampaignController::class,
     ]);
 
+    Route::get('my-campaigns', [CampaignController::class, 'myCampaigns']);
     Route::post('/campaigns/{campaign}/join', [CampaignController::class, 'join']);
     Route::delete('/campaigns/{campaign_id}/leave', [CampaignController::class, 'leave']);
     
