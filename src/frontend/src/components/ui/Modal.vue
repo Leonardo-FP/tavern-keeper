@@ -54,7 +54,7 @@
 </template>
 
 <style scoped>
-/* ✅ Scrollbar estilizada */
+/* Scrollbar estilizada */
 .custom-scroll::-webkit-scrollbar {
   width: 8px;
 }

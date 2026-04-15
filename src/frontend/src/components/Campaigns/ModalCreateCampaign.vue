@@ -4,13 +4,13 @@ import { ref } from 'vue';
 import { useModalsStore } from '@/stores/modals';
 import { useBoardStore } from '@/stores/boardStore';
 import { useToastStore } from '@/stores/toast';
-import CampaignForm from './CampaignForm.vue';
+import CampaignCreateForm from './CampaignCreateForm.vue';
 
 const boardStore = useBoardStore();
 const modalsStore = useModalsStore();
 const toastStore = useToastStore();
 
-const campaignFormRef = ref(null);
+const campaignCreateFormRef = ref(null);
 
 const props = defineProps({
   board: {
@@ -25,7 +25,7 @@ const emptyCampaign = {
 };
 
 const onConfirm = () => {
-  campaignFormRef.value.submit();
+  campaignCreateFormRef.value.submit();
 };
 
 const createCampaign = async (values) => {
@@ -49,8 +49,8 @@ const createCampaign = async (values) => {
     @close="modalsStore.closeModal()"
     @confirm="onConfirm"
   >
-    <CampaignForm
-      ref="campaignFormRef"
+    <CampaignCreateForm
+      ref="campaignCreateFormRef"
       :initialValues="emptyCampaign"
       :boardUsers="props.board.users"
       @submit="createCampaign"

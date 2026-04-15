@@ -16,7 +16,7 @@ const loadPage = async (page) => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-const opencampaign = (id) => {
+const openCampaign = (id) => {
   router.push(`/campaigns/${id}`);
 }
 
@@ -36,7 +36,7 @@ onMounted(() => loadPage(1));
     <div v-if="!loading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <CampaignCard 
           v-for="campaign in campaignStore.campaigns" :key="campaign.id" :campaign="campaign" 
-          @click="opencampaign"  
+          @click="openCampaign"  
         />
     </div>
 

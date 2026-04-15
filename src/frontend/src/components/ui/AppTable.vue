@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
     <table class="medieval-table">
         <thead>

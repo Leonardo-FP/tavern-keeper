@@ -1,3 +1,17 @@
+<script setup>
+  defineProps({
+    label: String,
+    id: String,    
+    error: String,
+    modelValue: [String, Number, Boolean], 
+    options: {
+      type: Array,
+      required: true 
+    }
+  });
+  defineEmits(['update:modelValue']);
+</script>
+
 <template>
   <div class="w-full">
     <label v-if="label" :for="id" class="block text-lg font-bold mb-1">{{ label }}</label>
@@ -24,17 +38,3 @@
     </p>
   </div>
 </template>
-
-<script setup>
-defineProps({
-  label: String,
-  id: String,      // O "name" que une o grupo no HTML
-  error: String,
-  modelValue: [String, Number, Boolean], // Radio pode ser true/false também
-  options: {
-    type: Array,
-    required: true // Ex: [{ label: 'Sim', value: true }, { label: 'Não', value: false }]
-  }
-});
-defineEmits(['update:modelValue']);
-</script>

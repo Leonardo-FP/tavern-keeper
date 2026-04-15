@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\StatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,4 +35,9 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::delete('/campaigns/{campaign_id}/leave', [CampaignController::class, 'leave']);
     
     Route::get('faqs', [FaqController::class, 'index']);
+
+    Route::apiResources([
+        'statuses' => StatusController::class,
+    ]);
+    
 });

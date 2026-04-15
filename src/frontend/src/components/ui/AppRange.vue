@@ -1,3 +1,16 @@
+<script setup>
+  defineProps({
+      label: String,
+      id: String,
+      error: String,
+      modelValue: [Number, String],
+      min: { type: Number, default: 1 },
+      max: { type: Number, default: 100 }
+  });
+
+  defineEmits(['update:modelValue']);
+</script>
+
 <template>
   <div class="w-full">
     <label v-if="label" :for="id" class="block text-lg font-bold mb-1">
@@ -30,16 +43,3 @@
     </p>
   </div>
 </template>
-
-<script setup>
-defineProps({
-    label: String,
-    id: String,
-    error: String,
-    modelValue: [Number, String],
-    min: { type: Number, default: 1 },
-    max: { type: Number, default: 100 }
-});
-
-defineEmits(['update:modelValue']);
-</script>

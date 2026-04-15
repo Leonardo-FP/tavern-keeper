@@ -21,9 +21,11 @@ export const useBoardStore = defineStore('boards', {
         async createBoard(payload) {
             try {
                 const response = await api.post('/boards', payload);
-                this.boards.push(response.data);
+
+                const board = response.data;
+
+                router.push(`/boards/${board.id}`);
                 
-                return response.data; 
             } catch (error) {
                 throw error;
             }
@@ -104,7 +106,7 @@ export const useBoardStore = defineStore('boards', {
         async joinCampaign(campaignId) {
             try {
                
-                const response = await api.post(`/campaigns/${campaignId}/join`);
+                await api.post(`/campaigns/${campaignId}/join`);
 
                 router.push(`/campaigns/${campaignId}`);
 

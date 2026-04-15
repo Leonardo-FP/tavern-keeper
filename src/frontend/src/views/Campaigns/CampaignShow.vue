@@ -2,6 +2,7 @@
     import AppBackButton from '@/components/ui/AppBackButton.vue';
     import AppTavernFrame from '@/components/ui/AppTavernFrame.vue';
     import { useCampaignStore } from '@/stores/campaignStore';
+    import { useStatusStore } from '@/stores/statusStore';
     import { useModalsStore } from '@/stores/modals';
     import { useRoute } from 'vue-router';
     import { storeToRefs } from 'pinia';
@@ -12,12 +13,16 @@
     import ModalLeaveCampaign from '@/components/Campaigns/ModalLeaveCampaign.vue';
 
     const campaignStore = useCampaignStore();
+    const statusStore = useStatusStore();
     const modalsStore = useModalsStore();
     const route = useRoute();
 
-    onMounted(() => {
+    onMounted(async () => {
         // Carrega as informações da campanha na campaignStore
         campaignStore.showCampaign(Number(route.params.id));
+
+        // Obtém os possíveis status de uma campanha
+        statusStore.fetchStatuses('campaign');
     });
 
     const gmUsers = computed(() => {
@@ -153,6 +158,7 @@
         <ModalEditCampaign
             v-if="current_campaign && modalsStore.activeModal === 'edit-campaign'"
             :initialValues="current_campaign"
+            :statuses="statusStore.statuses"
         />
     </div>
         <div class="p-8">
