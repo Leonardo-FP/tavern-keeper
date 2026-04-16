@@ -12,6 +12,11 @@ class CampaignResource extends JsonResource
             'id'   => $this->id,
             'name' => $this->name,
             'board_id' => $this->board_id,
+            'is_logged_user_gm' => $this->relationLoaded('users')
+                ? $this->users
+                    ->where('id', auth()->id())
+                    ->first()?->pivot?->role === 'gm'
+                : $this->isGm(auth()->user()),
 
             // Status da campanha
             'status' => $this->when(

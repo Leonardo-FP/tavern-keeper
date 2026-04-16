@@ -24,6 +24,16 @@ class CampaignService
 
         return $campaign;
     }
+
+    public function update(array $data, Campaign $campaign)
+    {
+        $campaign->name = $data['name'];
+        $campaign->status_id = $data['status_id'];
+
+        $campaign->save();
+
+        return $campaign;
+    }
     
     public function show($id)
     {

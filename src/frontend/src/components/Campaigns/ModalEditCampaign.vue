@@ -1,22 +1,18 @@
 <script setup>
 import Modal from '@/components/ui/Modal.vue';
 import { ref } from 'vue';
+import { useCampaignStore } from '@/stores/campaignStore';
 import { useModalsStore } from '@/stores/modals';
 import { useToastStore } from '@/stores/toast';
-import { useBoardStore } from '@/stores/boardStore';
 import CampaignEditForm from './CampaignEditForm.vue';
 
 const modalsStore = useModalsStore();
 const toastStore = useToastStore();
-const boardStore = useBoardStore();
+const campaignStore = useCampaignStore();
 
 const campaignEditFormRef = ref(null);
 
 const props = defineProps({
-  initialValues: {
-    type: Object,
-    required: true
-  },
   statuses: {
     type: Array,
     required: true
@@ -28,7 +24,15 @@ const onConfirm = () => {
 };
 
 const updateCampaign = async (values) => {
-  console.log(values);
+  
+    await campaignStore.updateCampaign(values);
+
+    toastStore.addToast({
+      type: 'success',
+      message: 'Campanha atualizada com sucesso!'
+    });
+
+    modalsStore.closeModal();
 };
 
 </script>
@@ -43,10 +47,7 @@ const updateCampaign = async (values) => {
   >
     <CampaignEditForm
       ref="campaignEditFormRef"
-      :initialValues="{
-        ...initialValues,
-        status_id: initialValues.status?.id
-      }"
+      :initialValues="campaignStore.current_campaign"
       :statuses="statuses"
       @submit="updateCampaign"
     />

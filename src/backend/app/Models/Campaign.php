@@ -46,6 +46,14 @@ class Campaign extends Model
         return $this->hasMany(CampaignSession::class);
     }
 
+    public function isGm(User $user): bool
+    {
+        return $this->users()
+            ->whereKey($user->id)
+            ->wherePivot('role', 'gm')
+            ->exists();
+    }
+
     protected function casts(): array
     {
         return [

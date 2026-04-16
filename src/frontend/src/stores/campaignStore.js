@@ -18,6 +18,18 @@ export const useCampaignStore = defineStore('campaigns', {
             this.current_campaign = {}
         },
 
+        async updateCampaign(payload) {
+            try {
+                const response = await api.put(`/campaigns/${payload.id}`, payload);
+                
+                this.current_campaign = response.data;
+
+                return response.data; 
+            } catch (error) {
+                throw error;
+            }
+        },
+
         async fetchMyCampaigns(page = 1) {
             try {
                 const response = await api.get(`/my-campaigns?page=${page}`);
@@ -38,7 +50,12 @@ export const useCampaignStore = defineStore('campaigns', {
         async showCampaign(id) {
             try {
                 const response = await api.get(`/campaigns/${id}`);
-                this.current_campaign = response.data;
+                
+                this.current_campaign = {
+                    ...response.data,
+                    status_id: response.data.status?.id
+                };
+ 
                 return response.data; 
 
             } catch (error) {

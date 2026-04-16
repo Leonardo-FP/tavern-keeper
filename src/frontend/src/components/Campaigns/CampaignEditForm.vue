@@ -1,5 +1,4 @@
 <script setup>
-import { ref, computed } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import AppInput from '@/components/ui/AppInput.vue'

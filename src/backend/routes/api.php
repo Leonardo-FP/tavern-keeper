@@ -31,7 +31,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
     ]);
 
     Route::get('my-campaigns', [CampaignController::class, 'myCampaigns']);
-    Route::post('/campaigns/{campaign}/join', [CampaignController::class, 'join']);
+    Route::post('/campaigns/{campaign_id}/join', [CampaignController::class, 'join']);
     Route::delete('/campaigns/{campaign_id}/leave', [CampaignController::class, 'leave']);
     
     Route::get('faqs', [FaqController::class, 'index']);

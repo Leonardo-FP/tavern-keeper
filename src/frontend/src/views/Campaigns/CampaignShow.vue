@@ -53,6 +53,7 @@
         <div class="absolute right-4">
        
             <button 
+                v-if="current_campaign?.is_logged_user_gm"
                 class="flex items-center btn-medieval"
                 @click="modalsStore.openModal('edit-campaign')"
             >
@@ -157,7 +158,6 @@
     <div class="p-8">
         <ModalEditCampaign
             v-if="current_campaign && modalsStore.activeModal === 'edit-campaign'"
-            :initialValues="current_campaign"
             :statuses="statusStore.statuses"
         />
     </div>

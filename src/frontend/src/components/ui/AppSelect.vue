@@ -21,7 +21,7 @@
       :class="[
         error 
           ? 'border-flamingo  focus:border-flamingo' 
-          : 'border-spice focus:border-rajah'
+          : 'border-spice focus:border-di-serria'
       ]"
     >
       <option 

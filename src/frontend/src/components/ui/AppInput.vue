@@ -20,12 +20,12 @@
       class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none transition-all duration-200"
       :class="[
         error 
-          ? 'border-flamingo  focus:border-flamingo' 
-          : 'border-spice focus:border-rajah'
+          ? 'border-oxblood  focus:border-oxblood' 
+          : 'border-spice focus:border-di-serria'
       ]"
       v-bind="$attrs"
     >
-    <p v-if="error" class="mt-1 text-sm text-flamingo font-medium italic">
+    <p v-if="error" class="mt-1 text-sm text-oxblood border-oxblood font-medium italic">
       {{ error }}
     </p>
   </div>

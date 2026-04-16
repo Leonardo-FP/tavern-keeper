@@ -35,9 +35,18 @@ class CampaignController extends Controller
         return response()->json($campaign_details, 200);
     }
 
-    public function update(UpdateCampaignRequest $request, Campaign $campaign)
+    public function update(UpdateCampaignRequest $request, string $id)
     {
-        //
+        $campaign = Campaign::findOrFail($id);
+        
+        $this->authorize('update', $campaign);
+
+        $campaign = $this->service->update(
+            $request->validated(),
+            $campaign
+        );
+
+        return response()->json($campaign, 200);
     }
 
     public function destroy(Campaign $campaign)
