@@ -41,4 +41,14 @@
     .medieval-table tbody tr:last-child td {
         border-bottom: none;
     }
+
+    .medieval-table td, 
+    .medieval-table thead th {
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(80, 50, 20, 0.25);
+        
+        word-break: break-word;       /* Quebra palavras longas se necessário */
+        overflow-wrap: break-word;   /* Garante a compatibilidade moderna de quebra */
+        white-space: normal;         /* Garante que o comportamento padrão de quebra esteja ativo */
+    }
 </style>

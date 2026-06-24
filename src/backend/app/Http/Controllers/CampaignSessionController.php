@@ -38,8 +38,12 @@ class CampaignSessionController extends Controller
         //
     }
 
-    public function destroy(CampaignSession $campaignSession)
+    public function destroy($campaignId, CampaignSession $campaignSession)
     {
-        //
+        $this->authorize('delete', $campaignSession);
+
+        $this->service->delete($campaignSession);
+
+        return response()->noContent();
     }
 }

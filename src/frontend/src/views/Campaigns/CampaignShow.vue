@@ -4,18 +4,21 @@
     import { useCampaignStore } from '@/stores/campaignStore';
     import { useStatusStore } from '@/stores/statusStore';
     import { useModalsStore } from '@/stores/modals';
+    import { useAuthStore } from '@/stores/auth';
     import { useRoute } from 'vue-router';
     import { storeToRefs } from 'pinia';
     import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon, PlusIcon, XMarkIcon } from '@heroicons/vue/24/solid';
-    import { computed, onMounted } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
     import AppTable from '@/components/ui/AppTable.vue';
     import ModalEditCampaign from '@/components/Campaigns/ModalEditCampaign.vue';
     import ModalLeaveCampaign from '@/components/Campaigns/ModalLeaveCampaign.vue';
     import ModalCreateSession from '@/components/CampaignSessions/ModalCreateSession.vue';
+    import ModalRemoveSession from '@/components/CampaignSessions/ModalRemoveSession.vue';
 
     const campaignStore = useCampaignStore();
     const statusStore = useStatusStore();
     const modalsStore = useModalsStore();
+    const authStore = useAuthStore();
     const route = useRoute();
 
     onMounted(async () => {
@@ -25,6 +28,12 @@
         // Obtém os possíveis status de uma campanha
         statusStore.fetchStatuses('campaign');
     });
+
+    // Armazena o valor da campanha atual em uma constante para facilitar o acesso
+    const { current_campaign } = storeToRefs(campaignStore);
+
+    // Armazena o valor da sessão que está selecionada
+    const selectedSession = ref(null);
 
     const gmUsers = computed(() => {
         return (current_campaign.value?.users || [])
@@ -36,9 +45,16 @@
             .filter(user => user?.role === 'player');
     });
 
-    // Armazena o valor da campanha atual em uma constante para facilitar o acesso
-    const { current_campaign } = storeToRefs(campaignStore);
+    // Verifica se o usuário logado pode deletar as sessões da mesa
+    const canRemoveCampaignSession = () => {
+        return current_campaign.value?.is_logged_user_gm;
+    };
 
+    // Função para abrir modal de deletar sessão da campanha
+    const openRemoveSessionModal = (session) => {
+        selectedSession.value = session;
+        modalsStore.openModal('remove-campaign-session');
+    }
 </script>
 
 <template>
@@ -103,11 +119,19 @@
                             class="text-xl"
                         >
                             <td class="text-tavern-style-alt">
-                                • {{ session.title }}
+                                {{ session.title }}
                             </td>
 
-                            <td>
-                                <button class="btn-medieval text-sm">Abrir</button>
+                            <td class="whitespace-nowrap w-1">
+                                <button class="btn-medieval text-sm min-w-[70px]">Abrir</button>
+                            </td>
+                            <td class="whitespace-nowrap w-1">
+                                <button 
+                                    v-if="canRemoveCampaignSession()"
+                                    class="btn-medieval" 
+                                    @click="openRemoveSessionModal(session)">
+                                        <XMarkIcon class="w-5 mr-1" />
+                                </button>
                             </td>
                         </tr>
                     </template>
@@ -182,6 +206,15 @@
         <ModalCreateSession
             v-if="modalsStore.activeModal === 'create-session'"
             :campaign="current_campaign"
+            @close="modalsStore.closeModal"
+        />
+    </div>
+    <div class="p-8">
+        <ModalRemoveSession
+            v-if="modalsStore.activeModal === 'remove-campaign-session'"
+            :user="authStore.user"
+            :campaign="current_campaign"
+            :session="selectedSession"
             @close="modalsStore.closeModal"
         />
     </div>

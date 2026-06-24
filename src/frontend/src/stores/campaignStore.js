@@ -84,5 +84,18 @@ export const useCampaignStore = defineStore('campaigns', {
                 throw error;
             }
         },
+
+        async removeCampaignSession(campaignId, sessionId) {
+            try {
+                await api.delete(`/campaigns/${campaignId}/sessions/${sessionId}`);
+
+                // Filtra a lista, removendo a sessão que foi deletada
+                this.current_campaign.sessions = this.current_board.sessions.filter(
+                    session => session.id !== sessionId
+                );
+            } catch(error) {
+                throw error;
+            }
+        },
     }
 });
