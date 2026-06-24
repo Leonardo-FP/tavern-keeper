@@ -2,46 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCampaignSessionRequest;
 use App\Models\CampaignSession;
+use App\Services\CampaignSessionService;
 use Illuminate\Http\Request;
 
 class CampaignSessionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected CampaignSessionService $service;
+
+    public function __construct(CampaignSessionService $service)
+    {
+        $this->service = $service;
+    }
+    
     public function index()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreCampaignSessionRequest $request, $campaignId)
     {
-        //
+        $campaignSession = $this->service->create($request->validated());
+
+        return response()->json($campaignSession, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(CampaignSession $campaignSession)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, CampaignSession $campaignSession)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(CampaignSession $campaignSession)
     {
         //

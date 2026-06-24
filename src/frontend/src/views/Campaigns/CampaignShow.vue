@@ -6,11 +6,12 @@
     import { useModalsStore } from '@/stores/modals';
     import { useRoute } from 'vue-router';
     import { storeToRefs } from 'pinia';
-    import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+    import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon, PlusIcon, XMarkIcon } from '@heroicons/vue/24/solid';
     import { computed, onMounted } from 'vue';
     import AppTable from '@/components/ui/AppTable.vue';
     import ModalEditCampaign from '@/components/Campaigns/ModalEditCampaign.vue';
     import ModalLeaveCampaign from '@/components/Campaigns/ModalLeaveCampaign.vue';
+    import ModalCreateSession from '@/components/CampaignSessions/ModalCreateSession.vue';
 
     const campaignStore = useCampaignStore();
     const statusStore = useStatusStore();
@@ -52,6 +53,15 @@
 
         <div class="absolute right-4">
        
+            <button 
+                v-if="current_campaign?.is_logged_user_gm"
+                class="flex items-center btn-medieval" 
+                @click="modalsStore.openModal('create-session')"
+            >
+                <PlusIcon class="w-5 mr-1"/> 
+                <span>Cadastrar Sessão</span>
+            </button>
+
             <button 
                 v-if="current_campaign?.is_logged_user_gm"
                 class="flex items-center btn-medieval"
@@ -161,9 +171,16 @@
             :statuses="statusStore.statuses"
         />
     </div>
-        <div class="p-8">
+    <div class="p-8">
         <ModalLeaveCampaign
             v-if="modalsStore.activeModal === 'leave-campaign'"
+            :campaign="current_campaign"
+            @close="modalsStore.closeModal"
+        />
+    </div>
+    <div class="p-8">
+        <ModalCreateSession
+            v-if="modalsStore.activeModal === 'create-session'"
             :campaign="current_campaign"
             @close="modalsStore.closeModal"
         />

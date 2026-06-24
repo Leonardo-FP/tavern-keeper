@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\CampaignSessionController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\StatusController;
 use Illuminate\Http\Request;
@@ -33,6 +34,8 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::get('my-campaigns', [CampaignController::class, 'myCampaigns']);
     Route::post('/campaigns/{campaign_id}/join', [CampaignController::class, 'join']);
     Route::delete('/campaigns/{campaign_id}/leave', [CampaignController::class, 'leave']);
+
+    Route::apiResource('campaigns.sessions', CampaignSessionController::class);
     
     Route::get('faqs', [FaqController::class, 'index']);
 

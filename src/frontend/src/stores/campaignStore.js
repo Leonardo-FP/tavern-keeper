@@ -72,5 +72,17 @@ export const useCampaignStore = defineStore('campaigns', {
                 throw error;
             }
         },
+
+        async createSession(payload) {
+            try {
+                const campaign_id = payload.campaign_id;
+
+                const response = await api.post(`/campaigns/${campaign_id}/sessions`, payload);
+                this.current_campaign.sessions.push(response.data);
+
+            } catch(error) {
+                throw error;
+            }
+        },
     }
 });
