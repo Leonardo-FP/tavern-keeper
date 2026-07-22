@@ -90,7 +90,7 @@ export const useCampaignStore = defineStore('campaigns', {
                 await api.delete(`/campaigns/${campaignId}/sessions/${sessionId}`);
 
                 // Filtra a lista, removendo a sessão que foi deletada
-                this.current_campaign.sessions = this.current_board.sessions.filter(
+                this.current_campaign.sessions = this.current_campaign.sessions.filter(
                     session => session.id !== sessionId
                 );
             } catch(error) {

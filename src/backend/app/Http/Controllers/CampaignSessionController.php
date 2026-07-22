@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCampaignSessionRequest;
+use App\Models\Campaign;
 use App\Models\CampaignSession;
 use App\Services\CampaignSessionService;
 use Illuminate\Http\Request;
@@ -38,11 +39,11 @@ class CampaignSessionController extends Controller
         //
     }
 
-    public function destroy($campaignId, CampaignSession $campaignSession)
+    public function destroy(Campaign $campaign, CampaignSession $session)
     {
-        $this->authorize('delete', $campaignSession);
+        $this->authorize('delete', $session);
 
-        $this->service->delete($campaignSession);
+        $this->service->delete($session);
 
         return response()->noContent();
     }
