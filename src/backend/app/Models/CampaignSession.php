@@ -21,4 +21,9 @@ class CampaignSession extends Model
     {
         return $this->belongsTo(Campaign::class);
     }
+
+    public function entries()
+    {
+        return $this->hasMany(SessionEntry::class);
+    }
 }

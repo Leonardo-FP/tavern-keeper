@@ -13,9 +13,15 @@ class CampaignSessionService
         return $session;
     }
 
+    public function show($id)
+    {
+        $campaignSession = CampaignSession::with(['campaign', 'entries'])->findOrFail($id);
+
+        return $campaignSession;
+    }
+
     public function delete(CampaignSession $campaignSession): bool
     {
-        // Qualquer lógica de negócio antes de deletar (ex: checar permissões) iria aqui
         return $campaignSession->delete();
     }
 }

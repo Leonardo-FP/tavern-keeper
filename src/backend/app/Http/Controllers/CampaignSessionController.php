@@ -29,9 +29,11 @@ class CampaignSessionController extends Controller
         return response()->json($campaignSession, 201);
     }
 
-    public function show(CampaignSession $campaignSession)
+    public function show(Campaign $campaign, CampaignSession $session)
     {
-        //
+        $session_details = $this->service->show($session->id);
+
+        return response()->json($session_details, 200);
     }
 
     public function update(Request $request, CampaignSession $campaignSession)

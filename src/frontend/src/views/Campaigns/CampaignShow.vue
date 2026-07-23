@@ -6,6 +6,7 @@
     import { useModalsStore } from '@/stores/modals';
     import { useAuthStore } from '@/stores/auth';
     import { useRoute } from 'vue-router';
+    import router from '@/router';
     import { storeToRefs } from 'pinia';
     import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon, PlusIcon, XMarkIcon } from '@heroicons/vue/24/solid';
     import { computed, onMounted, ref } from 'vue';
@@ -54,6 +55,11 @@
     const openRemoveSessionModal = (session) => {
         selectedSession.value = session;
         modalsStore.openModal('remove-campaign-session');
+    }
+
+    // Função para abrir a tela de visualização da sessão
+    const openSession = (campaignId, sessionId) => {
+        router.push(`/campaigns/${campaignId}/sessions/${sessionId}`);
     }
 </script>
 
@@ -123,7 +129,12 @@
                             </td>
 
                             <td class="whitespace-nowrap w-1">
-                                <button class="btn-medieval text-sm min-w-[70px]">Abrir</button>
+                                <button 
+                                    class="btn-medieval text-sm min-w-[70px]"
+                                    @click="openSession(session.campaign_id, session.id, session)"
+                                >
+                                    Abrir
+                                </button>
                             </td>
                             <td class="whitespace-nowrap w-1">
                                 <button 
