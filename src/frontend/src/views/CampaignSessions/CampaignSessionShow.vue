@@ -1,13 +1,16 @@
 <script setup>
     import AppBackButton from '@/components/ui/AppBackButton.vue';
     import AppTavernFrame from '@/components/ui/AppTavernFrame.vue';
+    import AppChat from '@/components/ui/AppChat.vue';
     import { useCampaignSessionStore } from '@/stores/campaignSessionStore';
+    import { useAuthStore } from '@/stores/auth';
     import { computed, onMounted } from 'vue';
     import { storeToRefs } from 'pinia';
     import { useRoute } from 'vue-router';
 
     const campaignSessionStore = useCampaignSessionStore();
     const route = useRoute();
+    const authStore = useAuthStore();
 
     // Armazena o valor da sessão atual em uma constante para facilitar o acesso
     const { campaign_session } = storeToRefs(campaignSessionStore);
@@ -20,7 +23,7 @@
         await campaignSessionStore.showCampaignSession(campaignId, sessionId);
     });
 
-    const entries = computed(() => campaign_session.value?.entries ?? []);
+    const entries = computed(() => campaign_session.value.entries ?? []);
 
 </script>
 
@@ -40,9 +43,10 @@
             <h3 class="text-tavern-style text-center mb-4">Registros da Sessão</h3>
 
             <AppTavernFrame>
-                <div v-for="entry in campaign_session.entries" :key="entry.id">
-                    {{ entry.content }}
-                </div>
+                <AppChat
+                    :entries="entries"
+                    :current-user-id="authStore.user?.id"
+                />
             </AppTavernFrame>
         </div>
     </div>

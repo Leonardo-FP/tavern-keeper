@@ -15,7 +15,7 @@ class CampaignSessionService
 
     public function show($id)
     {
-        $campaignSession = CampaignSession::with(['campaign', 'entries'])->findOrFail($id);
+        $campaignSession = CampaignSession::with(['campaign', 'entries.user'])->findOrFail($id);
 
         return $campaignSession;
     }
