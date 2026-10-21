@@ -31,6 +31,13 @@ class CampaignSessionController extends Controller
 
     public function show(Campaign $campaign, CampaignSession $session)
     {
+        abort_unless(
+            $session->campaign_id === $campaign->id,
+            404
+        );
+
+        $this->authorize('view', $session);
+    
         $session_details = $this->service->show($session->id);
 
         return response()->json($session_details, 200);

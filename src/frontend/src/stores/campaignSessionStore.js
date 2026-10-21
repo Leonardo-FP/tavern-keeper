@@ -27,5 +27,20 @@ export const useCampaignSessionStore = defineStore('campaignSessions', {
                 throw error;
             }
         },
+
+        async createEntry(campaignId, sessionId, content) {
+            const response = await api.post(
+                `/campaigns/${campaignId}/sessions/${sessionId}/entries`,
+                { content }
+            );
+
+            if (!this.campaign_session.entries) {
+                this.campaign_session.entries = [];
+            }
+
+            this.campaign_session.entries.push(response.data);
+
+            return response.data;
+        }
     }
 });

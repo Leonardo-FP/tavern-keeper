@@ -1,6 +1,10 @@
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
+
+const emit = defineEmits(['send-entry']);
+
+const newEntry = ref('');
 
 const props = defineProps({
     entries: {
@@ -11,7 +15,32 @@ const props = defineProps({
         type: [Number, String],
         required: true,
     },
+    entrySent: {
+        type: Number,
+        required: false,
+    },
+    entryError: {
+        type: String,
+        required: false,
+    }
 });
+
+function submitEntry() {
+    const content = newEntry.value.trim();
+
+    if(!content) {
+        return;
+    }
+
+    emit('send-entry', content);
+}
+
+watch( 
+    () => props.entrySent, 
+    () => {
+        newEntry.value = '';
+    }
+);
 
 // Mais recentes primeiro, sem modificar o array original.
 const sortedEntries = computed(() => {
@@ -73,11 +102,13 @@ function isCurrentUser(entry) {
         <!-- Campo de envio -->
         <form
             class="mt-4 flex shrink-0 items-end gap-3"
-            @submit.prevent
+            @submit.prevent="submitEntry"
         >
             <textarea
+                v-model="newEntry"
                 rows="1"
                 placeholder="Escreva sua mensagem..."
+                maxlength="10000"
                 class="min-w-0 flex-1 resize-none rounded-lg border border-stone-700 bg-stone-900 px-4 py-3 text-stone-100 placeholder-stone-500 outline-none focus:border-amber-500"
             ></textarea>
 
@@ -88,5 +119,9 @@ function isCurrentUser(entry) {
                 Enviar
             </button>
         </form>
+        <p v-if="entryError" class="text-red-600">
+            {{ entryError  }}
+        </p>
+
     </div>
 </template>

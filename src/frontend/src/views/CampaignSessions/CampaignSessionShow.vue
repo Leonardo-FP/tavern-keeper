@@ -4,7 +4,7 @@
     import AppChat from '@/components/ui/AppChat.vue';
     import { useCampaignSessionStore } from '@/stores/campaignSessionStore';
     import { useAuthStore } from '@/stores/auth';
-    import { computed, onMounted } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
     import { storeToRefs } from 'pinia';
     import { useRoute } from 'vue-router';
 
@@ -24,6 +24,31 @@
     });
 
     const entries = computed(() => campaign_session.value.entries ?? []);
+
+    const entrySent = ref(0);
+    const entryError = ref('');
+
+    async function handleSendEntry(content) {
+        const campaignId = Number(route.params.campaignId);
+        const sessionId = Number(route.params.sessionId);
+
+        try {
+            entryError.value = '';
+
+            await campaignSessionStore.createEntry(
+                campaignId, 
+                sessionId, 
+                content
+            );
+
+            ++entrySent.value; 
+        } catch(error) {
+
+            entryError.value = 
+                error.response?.data?.errors?.content?.[0] 
+                ?? 'Houve um erro ao enviar sua mensagem';
+        }
+    }
 
 </script>
 
@@ -46,6 +71,9 @@
                 <AppChat
                     :entries="entries"
                     :current-user-id="authStore.user?.id"
+                    :entrySent="entrySent"
+                    :entryError="entryError"
+                    @send-entry="handleSendEntry"
                 />
             </AppTavernFrame>
         </div>
