@@ -47,6 +47,7 @@ class CampaignService
         return auth()
             ->user()
             ->campaigns()
+            ->whereHas('board.users', fn ($query) => $query->whereKey(auth()->id()))
             ->withCount(['sessions as total_sessions', 'users as current_players'])
             ->latest()
             ->paginate(6);

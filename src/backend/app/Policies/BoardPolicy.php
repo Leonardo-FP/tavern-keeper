@@ -21,7 +21,7 @@ class BoardPolicy
      */
     public function view(User $user, Board $board): bool
     {
-        return false;
+        return $board->users()->whereKey($user->id)->exists();
     }
 
     /**
@@ -29,7 +29,12 @@ class BoardPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
+    }
+
+    public function leave(User $user, Board $board): bool
+    {
+        return $this->view($user, $board);
     }
 
     /**

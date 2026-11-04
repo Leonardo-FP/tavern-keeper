@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCampaignRequest;
 use App\Http\Requests\UpdateCampaignRequest;
 use App\Services\CampaignService;
 use App\Models\Campaign;
+use App\Models\Board;
 
 class CampaignController extends Controller
 {
@@ -23,6 +24,9 @@ class CampaignController extends Controller
 
     public function store(StoreCampaignRequest $request)
     {
+        $board = Board::findOrFail($request->validated('board_id'));
+        $this->authorize('create', [Campaign::class, $board]);
+
         $campaign = $this->service->create($request->validated());
 
         return response()->json($campaign->load('status'), 201);
@@ -30,6 +34,8 @@ class CampaignController extends Controller
 
     public function show(string $id)
     {
+        $this->authorize('view', Campaign::findOrFail($id));
+
         $campaign_details = $this->service->show($id);
 
         return response()->json($campaign_details, 200);
@@ -62,6 +68,8 @@ class CampaignController extends Controller
     }
 
     public function join(int $campaign_id){
+        $this->authorize('join', Campaign::findOrFail($campaign_id));
+
         $campaign = $this->service->join($campaign_id);
 
         return response()->json($campaign, 200);
@@ -71,6 +79,8 @@ class CampaignController extends Controller
     {
         $campaign = Campaign::findOrFail($campaign_id);
         $user = auth()->user();
+
+        $this->authorize('leave', $campaign);
 
         $this->service->leave($campaign, $user);
 

@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Campaign;
+use App\Models\Board;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -21,15 +22,26 @@ class CampaignPolicy
      */
     public function view(User $user, Campaign $campaign): bool
     {
-        return false;
+        return $this->join($user, $campaign)
+            && $campaign->users()->whereKey($user->id)->exists();
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Board $board): bool
     {
-        return false;
+        return $board->isAdmin($user);
+    }
+
+    public function join(User $user, Campaign $campaign): bool
+    {
+        return $campaign->board?->users()->whereKey($user->id)->exists() ?? false;
+    }
+
+    public function leave(User $user, Campaign $campaign): bool
+    {
+        return $campaign->users()->whereKey($user->id)->exists();
     }
 
     /**
@@ -37,7 +49,7 @@ class CampaignPolicy
      */
     public function update(User $user, Campaign $campaign): bool
     {
-       return $campaign->isGm($user);
+       return $this->view($user, $campaign) && $campaign->isGm($user);
     }
 
     /**

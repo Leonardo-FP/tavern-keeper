@@ -19,7 +19,10 @@ class StoreCampaignRequest extends FormRequest
             'name'                     => ['required', 'string', 'max:100'],
             'board_id'                 => ['required', 'integer', 'exists:boards,id'],
             'campaign_users'           => ['required', 'array', 'min:1'],
-            'campaign_users.*.user_id' => ['required', 'integer', 'exists:users,id', 'distinct'],
+            'campaign_users.*.user_id' => [
+                'required', 'integer', 'exists:users,id', 'distinct',
+                Rule::exists('board_user', 'user_id')->where('board_id', $this->input('board_id')),
+            ],
             'campaign_users.*.role'    => ['required', Rule::enum(CampaignRole::class)],
         ];
     }
@@ -48,6 +51,9 @@ class StoreCampaignRequest extends FormRequest
     protected function withValidator($validator)
     {
         $validator->after(function ($validator) {
+            if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
 
             $users = collect($this->input('campaign_users'));
 

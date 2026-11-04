@@ -24,7 +24,7 @@ class CampaignSessionEntryController extends Controller
             404
         );
 
-        $this->authorize('view', $session);
+        $this->authorize('createEntry', $session);
 
         $entry = $this->service->create(
             $session,

@@ -22,9 +22,14 @@ class CampaignSessionController extends Controller
         //
     }
 
-    public function store(StoreCampaignSessionRequest $request, $campaignId)
+    public function store(StoreCampaignSessionRequest $request, Campaign $campaign)
     {
-        $campaignSession = $this->service->create($request->validated());
+        $this->authorize('create', [CampaignSession::class, $campaign]);
+
+        $campaignSession = $this->service->create([
+            ...$request->validated(),
+            'campaign_id' => $campaign->id,
+        ]);
 
         return response()->json($campaignSession, 201);
     }
@@ -50,6 +55,8 @@ class CampaignSessionController extends Controller
 
     public function destroy(Campaign $campaign, CampaignSession $session)
     {
+        abort_unless($session->campaign_id === $campaign->id, 404);
+
         $this->authorize('delete', $session);
 
         $this->service->delete($session);

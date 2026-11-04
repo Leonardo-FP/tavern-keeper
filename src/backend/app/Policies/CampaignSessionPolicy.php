@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\CampaignSession;
+use App\Models\Campaign;
 use App\Models\User;
 
 class CampaignSessionPolicy
@@ -19,9 +20,9 @@ class CampaignSessionPolicy
         return $this->isCampaignParticipant($user, $campaignSession);
     }
 
-    public function create(User $user): bool
+    public function create(User $user, Campaign $campaign): bool
     {
-        return false;
+        return $user->can('update', $campaign);
     }
 
     public function createEntry(
@@ -42,7 +43,8 @@ class CampaignSessionPolicy
         User $user,
         CampaignSession $campaignSession
     ): bool {
-        return $campaignSession->campaign->isGm($user);
+        return $this->isCampaignParticipant($user, $campaignSession)
+            && $campaignSession->campaign->isGm($user);
     }
 
     public function restore(
@@ -69,8 +71,6 @@ class CampaignSessionPolicy
             return false;
         }
 
-        return $campaign->users()
-            ->whereKey($user->id)
-            ->exists();
+        return $user->can('view', $campaign);
     }
 }

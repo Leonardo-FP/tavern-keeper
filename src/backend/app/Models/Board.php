@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Board extends Model 
 {
     use SoftDeletes;
+
+    protected $hidden = ['password'];
     
     protected $fillable = [
         'name',

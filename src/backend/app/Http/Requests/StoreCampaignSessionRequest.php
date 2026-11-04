@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCampaignSessionRequest extends FormRequest
 {
@@ -15,7 +16,7 @@ class StoreCampaignSessionRequest extends FormRequest
     {
         return [
             'title'        => ['required', 'string', 'max:100'],
-            'campaign_id' => ['required', 'integer', 'exists:campaigns,id'],
+            'campaign_id' => ['sometimes', 'integer', Rule::in([$this->route('campaign')->id])],
         ];
     }
 

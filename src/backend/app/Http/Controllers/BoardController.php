@@ -23,6 +23,8 @@ class BoardController extends Controller
 
     public function store(StoreBoardRequest $request)
     {
+        $this->authorize('create', Board::class);
+
         $board = $this->service->create($request->validated());
 
         return response()->json($board, 201);
@@ -30,6 +32,8 @@ class BoardController extends Controller
 
     public function show(string $id)
     {
+        $this->authorize('view', Board::findOrFail($id));
+
         $board_details = $this->service->show($id);
 
         return response()->json($board_details, 200);
@@ -77,6 +81,8 @@ class BoardController extends Controller
     {
         $board = Board::findOrFail($board_id);
         $user = auth()->user();
+
+        $this->authorize('leave', $board);
 
         $this->service->leave($board, $user);
 

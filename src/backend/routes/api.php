@@ -20,23 +20,20 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware(['auth:sanctum'])->group(function() {
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::apiResources([
-        'boards' => BoardController::class,
-    ]);
+    Route::apiResource('boards', BoardController::class)->only(['store', 'show', 'update']);
 
     Route::get('my-boards', [BoardController::class, 'myBoards']);
     Route::delete('/boards/{board_id}/users/{user_id}', [BoardController::class, 'removeUser']);
     Route::delete('/boards/{board_id}/leave', [BoardController::class, 'leave']);
 
-    Route::apiResources([
-        'campaigns' => CampaignController::class,
-    ]);
+    Route::apiResource('campaigns', CampaignController::class)->only(['store', 'show', 'update']);
 
     Route::get('my-campaigns', [CampaignController::class, 'myCampaigns']);
     Route::post('/campaigns/{campaign_id}/join', [CampaignController::class, 'join']);
     Route::delete('/campaigns/{campaign_id}/leave', [CampaignController::class, 'leave']);
 
-    Route::apiResource('campaigns.sessions', CampaignSessionController::class);
+    Route::apiResource('campaigns.sessions', CampaignSessionController::class)
+        ->only(['store', 'show', 'destroy']);
 
     Route::post(
         '/campaigns/{campaign}/sessions/{session}/entries',
@@ -45,8 +42,6 @@ Route::middleware(['auth:sanctum'])->group(function() {
     
     Route::get('faqs', [FaqController::class, 'index']);
 
-    Route::apiResources([
-        'statuses' => StatusController::class,
-    ]);
+    Route::apiResource('statuses', StatusController::class)->only(['index']);
     
 });
