@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -42,6 +43,7 @@ class AuthController extends Controller
     public function register(Request $request){
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'nickname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
             'password_confirmation' => ['required']
@@ -54,18 +56,23 @@ class AuthController extends Controller
         unset($validated['password_confirmation']);
 
         try{
-            $user = User::create($validated);
+            [$user, $token] = DB::transaction(function () use ($validated) {
+                $user = User::create($validated);
+                $token = $user->createToken('auth_token')->plainTextToken;
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+                return [$user, $token];
+            });
 
             return response()->json([
                 'message' => 'Usuário criado com sucesso! Seja bem vindo(a).',
                 'token' => $token,
                 'user' => $user,
-            ]);
+            ], 201);
 
         } catch(Exception $e){
-            return response()->json(['message' => 'Erro ao criar usuário']);
+            report($e);
+
+            return response()->json(['message' => 'Não foi possível criar sua conta. Tente novamente.'], 500);
         }
     }
 

@@ -4,6 +4,7 @@
     import { useAuthStore } from '../../stores/auth';
 
     const name = ref('');
+    const nickname = ref('');
     const email = ref('');
     const password = ref('');
     const confirmPassword = ref('');
@@ -13,6 +14,7 @@
     async function handleRegister() {
         await authStore.register({
             name: name.value,
+            nickname: nickname.value,
             email: email.value,
             password: password.value,
             password_confirmation: confirmPassword.value 
@@ -25,7 +27,7 @@
         <h2 class="text-center text-3xl font-extrabold text-gray-900 mb-6">Registro</h2>
         <form @submit.prevent="handleRegister">
             <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
                 <input 
                     type="text"
                     id="name"
@@ -35,6 +37,24 @@
                 >
                 <ul v-if="authStore?.fieldErrors?.name">
                     <li v-for="(msg, index) in authStore?.fieldErrors?.name" :key="index" class="text-red-600 text-sm">
+                        {{ msg }}
+                    </li>
+                </ul>
+            </div>
+            <div class="mb-4">
+                <label for="nickname" class="block text-sm font-medium text-gray-700 mb-1">Apelido</label>
+                <input
+                    type="text"
+                    id="nickname"
+                    v-model="nickname"
+                    required
+                    maxlength="255"
+                    aria-describedby="nickname-help"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                <p id="nickname-help" class="mt-1 text-sm text-gray-500">Como você quer aparecer nas mesas e campanhas.</p>
+                <ul v-if="authStore.fieldErrors.nickname">
+                    <li v-for="(msg, index) in authStore.fieldErrors.nickname" :key="index" class="text-red-600 text-sm">
                         {{ msg }}
                     </li>
                 </ul>
@@ -91,11 +111,9 @@
             >
                 {{ authStore.isLoading ? 'Cadastrando...' : 'Cadastrar' }} 
             </button>
-            <template v-if="authStore.authError">
-                <p v-for="error in authStore.authError.errors" :key="error" class="mt-4 text-center text-red-600 text-sm">
-                    {{ error }}
-                </p>
-            </template>
+            <p v-if="authStore.authError" role="alert" class="mt-4 text-center text-red-600 text-sm">
+                {{ authStore.authError }}
+            </p>
         </form>
         <p class="mt-6 text-center text-sm text-gray-600">
             Já possui uma conta?

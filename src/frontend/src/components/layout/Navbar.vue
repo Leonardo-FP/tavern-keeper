@@ -1,10 +1,21 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/solid';
 import { RouterLink } from 'vue-router';
 
 const authStore = useAuthStore();
+
+const avatarSrc = computed(() => {
+  const path = authStore.user?.icon?.path;
+
+  if (!path) {
+    return '/assets/icons/avatars/dragon.png';
+  }
+
+  // Preserve external URLs and resolve local paths from the site root.
+  return /^(https?:)?\/\//i.test(path) ? path : `/${path.replace(/^\/+/, '')}`;
+});
 
 const showMenu = ref(false);
 const menuRef = ref(null);
@@ -60,7 +71,7 @@ onBeforeUnmount(() => {
             <img
               v-if="authStore.user"
               class="rounded-full bg-black shadow-xl/30 border p-1 w-16 h-16 object-cover"
-              :src="authStore?.user?.icon?.path || '/assets/icons/avatars/dragon.png'"
+              :src="avatarSrc"
               alt="Ícone do usuário"
             />
 

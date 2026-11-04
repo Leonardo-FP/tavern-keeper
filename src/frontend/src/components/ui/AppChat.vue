@@ -1,10 +1,11 @@
 
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const emit = defineEmits(['send-entry']);
 
 const newEntry = ref('');
+const messagesContainer = ref(null);
 
 const props = defineProps({
     entries: {
@@ -25,6 +26,19 @@ const props = defineProps({
     }
 });
 
+function scrollToBottom() {
+    const container = messagesContainer.value;
+
+    if (container) {
+        container.scrollTop = container.scrollHeight;
+    }
+}
+
+onMounted(scrollToBottom);
+
+// Aguarda o Vue renderizar as mensagens carregadas da API ou recém-enviadas.
+watch(() => props.entries.length, scrollToBottom, { flush: 'post' });
+
 function submitEntry() {
     const content = newEntry.value.trim();
 
@@ -42,26 +56,18 @@ watch(
     }
 );
 
-// Mais recentes primeiro, sem modificar o array original.
-const sortedEntries = computed(() => {
-    return [...props.entries].sort((a, b) => {
-        return new Date(b.created_at) - new Date(a.created_at);
-    });
-});
-
 function isCurrentUser(entry) {
     return String(entry.user_id) === String(props.currentUserId);
 }
 </script>
 
-
 <template>
     <div class="flex h-[50dvh] flex-col rounded-lg border border-amber-900/30 bg-stone-950/40 p-4">
 
         <!-- Área das mensagens -->
-        <div class="min-h-0 flex-1 overflow-y-auto">
+        <div ref="messagesContainer" class="min-h-0 flex-1 overflow-y-auto">
             <div
-                v-if="sortedEntries.length === 0"
+                v-if="props.entries.length === 0"
                 class="flex h-full items-center justify-center text-stone-400"
             >
                 Nenhuma mensagem registrada nesta sessão.
@@ -69,7 +75,7 @@ function isCurrentUser(entry) {
 
             <div v-else class="flex flex-col gap-4">
                 <div
-                    v-for="entry in sortedEntries"
+                    v-for="entry in props.entries"
                     :key="entry.id"
                     class="flex w-full"
                     :class="isCurrentUser(entry) ? 'justify-end' : 'justify-start'"

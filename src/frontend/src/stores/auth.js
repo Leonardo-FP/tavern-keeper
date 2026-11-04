@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', {
     user: JSON.parse(localStorage.getItem('user_data')) || null,
     token: localStorage.getItem('auth_token') || null,
     authError: null,
+    fieldErrors: {},
     isLoading: false,
   }),
 
@@ -58,6 +59,8 @@ export const useAuthStore = defineStore('auth', {
 
     async register(credentials) {
       this.isLoading = true;
+      this.fieldErrors = {};
+      this.authError = null;
       try{
         const response = await api.post('/register', credentials);
 
@@ -71,9 +74,6 @@ export const useAuthStore = defineStore('auth', {
         router.push('/');
       } catch(error) {
 
-        // Limpa os erros antigos
-        this.fieldErros = null;
-
         const data = error.response?.data;
 
         if(data?.errors){
@@ -81,6 +81,9 @@ export const useAuthStore = defineStore('auth', {
           this.fieldErrors = data.errors;
         } else {
           this.fieldErrors = {};
+          this.authError = error.response?.status >= 500
+            ? 'Não foi possível criar sua conta. Tente novamente.'
+            : data?.message || 'Não foi possível conectar ao servidor. Tente novamente.';
         }
 
         this.isLogged = false;
