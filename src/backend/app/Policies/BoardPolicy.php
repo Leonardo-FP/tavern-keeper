@@ -8,25 +8,16 @@ use Illuminate\Auth\Access\Response;
 
 class BoardPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
     public function viewAny(User $user): bool
     {
         return false;
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Board $board): bool
     {
         return $board->users()->whereKey($user->id)->exists();
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
         return true;
@@ -37,41 +28,26 @@ class BoardPolicy
         return $this->view($user, $board);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Board $board): bool
     {
         return $board->isAdmin($user);
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
     public function delete(User $user, Board $board): bool
     {
         return false;
     }
 
-    /**
-     * Determine whether the user can remove users of the model.
-     */
     public function removeUsers(User $user, Board $board): bool
     {
         return $board->isAdmin($user);
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
     public function restore(User $user, Board $board): bool
     {
         return false;
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
     public function forceDelete(User $user, Board $board): bool
     {
         return false;
