@@ -4,6 +4,7 @@
     import { useAuthStore } from '@/stores/auth';
     import { onBeforeRouteLeave, useRoute } from 'vue-router'
     import router from '@/router';
+    import api from '@/services/api';
     import { storeToRefs } from 'pinia';
     import { ref, computed, onMounted } from 'vue';
     import AppTable from '@/components/ui/AppTable.vue';
@@ -22,8 +23,13 @@
     const authStore = useAuthStore();
 
     onMounted(() => {
+        const boardId = Number(route.params.id);
+
         // Carrega as informações da mesa na boardStore
-        boardStore.showBoard(Number(route.params.id));
+        boardStore.showBoard(boardId);
+
+        // Carrega as notificações do mural de avisos
+        showNotices(boardId);
     });
 
     // Armazena o valor da mesa atual em uma constante para facilitar o acesso
@@ -38,6 +44,19 @@
     const hasCampaigns = computed(() => {
         return current_board.value?.campaigns?.length > 0;
     });
+
+    const notices = ref([]); 
+
+    async function showNotices(boardId) {
+        try {
+            const response = await api.get(`/boards/${boardId}/notices`);
+
+            notices.value = response.data;
+            
+        } catch (error) {
+            throw error;
+        }
+    };
 
     // Verifica se o usuário logado pode remover os outros da mesa
     const canRemoveUser = (user) => {
@@ -208,7 +227,9 @@
         <div class="col-span-12">
             <h3 class="text-tavern-style text-center mb-4">Mural de Avisos</h3>
             
-            <AppTavernFrame></AppTavernFrame>
+            <AppTavernFrame>
+                <p v-for="notice in notices">{{ notice.content }}</p>
+            </AppTavernFrame>
         </div>
     </div>
     <div class="p-8">

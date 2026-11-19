@@ -6,6 +6,7 @@ use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CampaignSessionController;
 use App\Http\Controllers\CampaignSessionEntryController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\StatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,8 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::apiResource('boards', BoardController::class)->only(['store', 'show', 'update']);
+
+    Route::get('boards/{board}/notices', [NoticeController::class, 'index']);
 
     Route::get('my-boards', [BoardController::class, 'myBoards']);
     Route::delete('/boards/{board_id}/users/{user_id}', [BoardController::class, 'removeUser']);
@@ -43,5 +46,4 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::get('faqs', [FaqController::class, 'index']);
 
     Route::apiResource('statuses', StatusController::class)->only(['index']);
-    
 });
